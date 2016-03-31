@@ -1,0 +1,22 @@
+[horizontal]
+1.6:: Mise a jour des entrées analogiques, sonde, téléinfo, même si la valeur ne change pas pour les graphiques.
+
+1.5:: Compatibilité Wes 2
++
+Prise en charge des entrées analogiques
+
+1.4:: Compatibilité Jeedom 2.0
+
+1.3:: Modification de l'extension du logo.
++
+Compatibilité Imperihome
++
+Retrait de la suppression des équipements lors de la désactivation du plugin
+
+1.2:: Correction par rapport au nouveau core.
++
+Possibilité d'augmenter la frequence de rafraichissement
+
+1.1:: Correction pour l'activation/modification des relais.
+
+1.0:: Création du plugin
