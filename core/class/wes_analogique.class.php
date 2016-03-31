@@ -130,6 +130,29 @@ class wes_analogiqueCmd extends cmd
         }
     }
 
+	public function getUrlPush() {
+		if ( config::byKey('internalAddr') == "" ) {
+			throw new Exception(__('L\'adresse IP du serveur Jeedom doit être renseignée.',__FILE__));
+		}
+		$pathjeedom = preg_replace("/plugins.*$/", "", $_SERVER['PHP_SELF']);
+		if ( substr($pathjeedom, 0, 1) != "/" ) {
+			$pathjeedom = "/".$pathjeedom;
+		}
+		if ( substr($pathjeedom, -1) != "/" ) {
+			$pathjeedom = $pathjeedom."/";
+		}
+		$eqLogic = $this->getEqLogic();
+		$wesid = substr($eqLogic->getLogicalId(), strpos($eqLogic->getLogicalId(),"_")+2);
+		$url = 'http';
+		if (  isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on" )
+			$url .= 's';
+		$url .= '://'.config::byKey('internalAddr').$pathjeedom.'core/api/jeeApi.php?api='.config::byKey('api').'&type=wes_analogique&id='.$this->getId().'&value=';
+		if ( $this->getLogicalId() == 'reel' ) {
+			$url .= '$E01'.$wesid;
+		}
+		
+		return $url;
+	}
     public function execute($_options = null) {
         if ($this->getLogicalId() == 'reel') {
 			try {

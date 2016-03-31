@@ -119,26 +119,17 @@ class wes_bouton extends eqLogic {
 		}
     }
 
-	public function configPush($url_serveur, $pathjeedom) {
-        $cmd = $this->getCmd(null, 'state');
-		$url_serveur .= 'protect/settings/push1.htm?channel='.$wesid;
-		$url = $url_serveur .'&server='.$_SERVER['SERVER_ADDR'].'&port='.$_SERVER['SERVER_PORT'].'&pass=&enph=1';
-		log::add('wes','debug',"get ".preg_replace("/:[^:]*@/", ":XXXX@", $url));
-		$result = file_get_contents($url);
-		if ( $result === false )
-			throw new Exception(__('Le wes ne repond pas.',__FILE__));
-		$url = $url_serveur .'&cmd1='.urlencode($pathjeedom.'core/api/jeeApi.php?api='.config::byKey('api').'&type=wes_bouton&id='.$cmd->getId().'&state=1');
-		log::add('wes','debug',"get ".preg_replace("/:[^:]*@/", ":XXXX@", $url));
-		$result = file_get_contents($url);
-		if ( $result === false )
-			throw new Exception(__('Le wes ne repond pas.',__FILE__));
-		$url = $url_serveur .'&cmd2='.urlencode($pathjeedom.'core/api/jeeApi.php?api='.config::byKey('api').'&type=wes_bouton&id='.$cmd->getId().'&state=0');
-		log::add('wes','debug',"get ".preg_replace("/:[^:]*@/", ":XXXX@", $url));
-		$result = file_get_contents($url);
-		if ( $result === false )
-			throw new Exception(__('Le wes ne repond pas.',__FILE__));
+	public function configPush($wes_eqLogic, $compteurId, $pathjeedom) {
+		$wesid = substr($this->getLogicalId(), strpos($this->getLogicalId(),"_")+2);
+		$cmd = $this->getCmd(null, 'state');
+		$wes_eqLogic->getUrl('program.cgi?PRG='.$compteurId.','.($wesid+30).',0,0,1,0,1,2,0,1,4,0000,0000,9,0');
+		$wes_eqLogic->getUrl('program.cgi?RQT'.$compteurId.'='.$pathjeedom.'core/api/jeeApi.php?api='.config::byKey('api').'%26type=wes_bouton%26id='.$cmd->getId().'%26value=$I'.$wesid.'00');
+		$compteurId++;
+		$wes_eqLogic->getUrl('program.cgi?PRG='.$compteurId.','.($wesid+30).',0,0,0,0,1,2,0,1,4,0000,0000,9,0');
+		$wes_eqLogic->getUrl('program.cgi?RQT'.$compteurId.'='.$pathjeedom.'core/api/jeeApi.php?api='.config::byKey('api').'%26type=wes_bouton%26id='.$cmd->getId().'%26value=$I'.$wesid.'00');
+		return $compteurId;
 	}
-
+	
     public function getLinkToConfiguration() {
         return 'index.php?v=d&p=wes&m=wes&id=' . $this->getId();
     }
@@ -197,7 +188,7 @@ class wes_boutonCmd extends cmd
 		$eqLogic = $this->getEqLogic();
 		$wesid = substr($eqLogic->getLogicalId(), strpos($eqLogic->getLogicalId(),"_")+2);
 		$url = 'http';
-		if ( $_SERVER['HTTPS'] == "on" )
+		if (  isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on" )
 			$url .= 's';
 		$url .= '://'.config::byKey('internalAddr').$pathjeedom.'core/api/jeeApi.php?api='.config::byKey('api').'&type=wes_bouton&id='.$this->getId().'&value=';
 		if ( $this->getLogicalId() == 'state' ) {

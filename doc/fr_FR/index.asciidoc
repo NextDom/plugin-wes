@@ -31,13 +31,19 @@ Puis définir :
 
 === Frequence de rafraichissement ===
 Les données sont récupéré par le plugin toutes les minutes. Impossible de faire plus fréquent.
-Le push http peut-être activé.
+Le push http peut-être activé. Pour celà, il faut cliquer sur
+
+image::../images/bouton_config_push.jpg[]
+
+Ensuite aller en bas et cliquer sur Appliquer.
 
 == Quelques copies d'écran ==
 image::../images/wes_screenshot1.jpg[align="center"]
 image::../images/wes_screenshot2.jpg[align="center"]
 image::../images/wes_screenshot3.jpg[align="center"]
 
+=== FAQ
+include::faq.asciidoc[]
+
 == Change log ==
 include::changelog.asciidoc[]
-

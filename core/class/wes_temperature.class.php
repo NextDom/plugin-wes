@@ -101,7 +101,7 @@ class wes_temperatureCmd extends cmd
 		$eqLogic = $this->getEqLogic();
 		$wesid = substr($eqLogic->getLogicalId(), strpos($eqLogic->getLogicalId(),"_")+2);
 		$url = 'http';
-		if ( $_SERVER['HTTPS'] == "on" )
+		if (  isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on" )
 			$url .= 's';
 		$url .= '://'.config::byKey('internalAddr').$pathjeedom.'core/api/jeeApi.php?api='.config::byKey('api').'&type=wes_temperature&id='.$this->getId().'&value=';
 		if ( $this->getLogicalId() == 'reel' ) {

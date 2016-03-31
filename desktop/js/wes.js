@@ -173,8 +173,6 @@ $('#bt_ApplyconfigPush').on('click', function() {
         data: {
             action: "configPush",
 			id: $('.li_eqLogic.active').attr('data-eqLogic_id'),
-			ip: $('.configPushIP').val(),
-			path: $('.configPushPath').val(),
 			eqLogicPush_id: list_object.join(",")
         },
         dataType: 'json',

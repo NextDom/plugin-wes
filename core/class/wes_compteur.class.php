@@ -25,28 +25,57 @@ class wes_compteur extends eqLogic {
     /*     * ***********************Methode static*************************** */
 	public function postInsert()
 	{
-		$index = $this->getCmd(null, 'index');
-        if ( ! is_object($index) ) {
-            $index = new wes_compteurCmd();
-			$index->setName('Index');
-			$index->setEqLogic_id($this->getId());
-			$index->setType('info');
-			$index->setSubType('numeric');
-			$index->setLogicalId('index');
-			$index->setEventOnly(1);
-			$index->save();
+        $nbimpulsion = $this->getCmd(null, 'nbimpulsion');
+        if ( ! is_object($nbimpulsion) ) {
+            $nbimpulsion = new wes_compteurCmd();
+			$nbimpulsion->setName('Nombre d impulsion');
+			$nbimpulsion->setEqLogic_id($this->getId());
+			$nbimpulsion->setType('info');
+			$nbimpulsion->setSubType('numeric');
+			$nbimpulsion->setLogicalId('nbimpulsion');
+			$nbimpulsion->setEventOnly(1);
+			$nbimpulsion->save();
 		}
-        $debit = $this->getCmd(null, 'debit');
-        if ( ! is_object($debit) ) {
-            $debit = new wes_compteurCmd();
-			$debit->setName('Debit');
-			$debit->setEqLogic_id($this->getId());
-			$debit->setType('info');
-			$debit->setSubType('numeric');
-			$debit->setLogicalId('debit');
-			$debit->setUnite("Imp/min");
-			$debit->setEventOnly(1);
-			$debit->save();
+        $nbimpulsionminute = $this->getCmd(null, 'nbimpulsionminute');
+        if ( ! is_object($nbimpulsionminute) ) {
+            $nbimpulsionminute = new wes_compteurCmd();
+			$nbimpulsionminute->setName('Nombre d impulsion par minute');
+			$nbimpulsionminute->setEqLogic_id($this->getId());
+			$nbimpulsionminute->setType('info');
+			$nbimpulsionminute->setSubType('numeric');
+			$nbimpulsionminute->setLogicalId('nbimpulsionminute');
+			$nbimpulsionminute->setUnite("Imp/min");
+			$nbimpulsionminute->setEventOnly(1);
+			$nbimpulsionminute->setConfiguration('calcul', '#brut#');
+			$nbimpulsionminute->save();
+		}
+	}
+
+	public function postUpdate()
+	{
+        $nbimpulsion = $this->getCmd(null, 'nbimpulsion');
+        if ( ! is_object($nbimpulsion) ) {
+            $nbimpulsion = new wes_compteurCmd();
+			$nbimpulsion->setName('Nombre d impulsion');
+			$nbimpulsion->setEqLogic_id($this->getId());
+			$nbimpulsion->setType('info');
+			$nbimpulsion->setSubType('numeric');
+			$nbimpulsion->setLogicalId('nbimpulsion');
+			$nbimpulsion->setEventOnly(1);
+			$nbimpulsion->save();
+		}
+        $nbimpulsionminute = $this->getCmd(null, 'nbimpulsionminute');
+        if ( ! is_object($nbimpulsionminute) ) {
+            $nbimpulsionminute = new wes_compteurCmd();
+			$nbimpulsionminute->setName('Nombre d impulsion par minute');
+			$nbimpulsionminute->setEqLogic_id($this->getId());
+			$nbimpulsionminute->setType('info');
+			$nbimpulsionminute->setSubType('numeric');
+			$nbimpulsionminute->setLogicalId('nbimpulsionminute');
+			$nbimpulsionminute->setUnite("Imp/min");
+			$nbimpulsionminute->setConfiguration('calcul', '#brut#');
+			$nbimpulsionminute->setEventOnly(1);
+			$nbimpulsionminute->save();
 		}
 	}
 
@@ -92,7 +121,7 @@ class wes_compteurCmd extends cmd
 		$eqLogic = $this->getEqLogic();
 		$wesid = substr($eqLogic->getLogicalId(), strpos($eqLogic->getLogicalId(),"_")+2);
 		$url = 'http';
-		if ( $_SERVER['HTTPS'] == "on" )
+		if (  isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on" )
 			$url .= 's';
 		$url .= '://'.config::byKey('internalAddr').$pathjeedom.'core/api/jeeApi.php?api='.config::byKey('api').'&type=wes_compteur&id='.$this->getId.'&value=';
 		if ( $this->getLogicalId() == 'debit' ) {

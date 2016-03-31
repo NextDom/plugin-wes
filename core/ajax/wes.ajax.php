@@ -24,6 +24,14 @@ try {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
 
+    if (init('action') == 'configPush') {
+        $eqLogic = wes::byId(init('id'));
+        if (!is_object($eqLogic)) {
+            throw new Exception(__('wes eqLogic non trouvé : ', __FILE__) . init('id'));
+        }
+		$eqLogic->configPush();
+        ajax::success(__('Url de push sur wes configuré', __FILE__));
+    }
     if (init('action') == 'getUrlPush') {
         $eqLogic_cmd = cmd::byId(init('id'));
         ajax::success(__('Url de push a configurer est ', __FILE__).$eqLogic_cmd->getUrlPush());

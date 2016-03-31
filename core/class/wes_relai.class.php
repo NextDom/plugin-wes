@@ -105,30 +105,17 @@ class wes_relai extends eqLogic {
 		}
     }
 
-	public function configPush($url_serveur, $pathjeedom) {
-        $cmd = $this->getCmd(null, 'state');
-		$url_serveur .= 'protect/settings/push2.htm?channel='.($wesid+32);
-		$url = $url_serveur .'&server='.$_SERVER['SERVER_ADDR'].'&port='.$_SERVER['SERVER_PORT'].'&pass=&enph=1';
-		log::add('wes','debug',"get ".preg_replace("/:[^:]*@/", ":XXXX@", $url));
-		$result = file_get_contents($url);
-		if ( $result === false ) {
-			log::add('wes','error',__('Le wes ne repond pas.',__FILE__)." get ".preg_replace("/:[^:]*@/", ":XXXX@", $url));
-			throw new Exception(__('Le wes ne repond pas.',__FILE__));
-		}
-		$url = $url_serveur .'&cmd1='.urlencode($pathjeedom.'core/api/jeeApi.php?api='.config::byKey('api').'&type=wes_relai&id='.$cmd->getId().'&value=1');
-		log::add('wes','debug',"get ".preg_replace("/:[^:]*@/", ":XXXX@", $url));
-		$result = file_get_contents($url);
-		if ( $result === false ) {
-			log::add('wes','error',__('Le wes ne repond pas.',__FILE__)." get ".preg_replace("/:[^:]*@/", ":XXXX@", $url));
-			throw new Exception(__('Le wes ne repond pas.',__FILE__));
-		}
-		$url = $url_serveur .'&cmd2='.urlencode($pathjeedom.'core/api/jeeApi.php?api='.config::byKey('api').'&type=wes_relai&id='.$cmd->getId().'&value=0');
-		log::add('wes','debug',"get ".preg_replace("/:[^:]*@/", ":XXXX@", $url));
-		$result = file_get_contents($url);
-		if ( $result === false ) {
-			log::add('wes','error',__('Le wes ne repond pas.',__FILE__)." get ".preg_replace("/:[^:]*@/", ":XXXX@", $url));
-			throw new Exception(__('Le wes ne repond pas.',__FILE__));
-		}
+	public function configPush($wes_eqLogic, $compteurId, $pathjeedom) {
+		$wesid = substr($this->getLogicalId(), strpos($this->getLogicalId(),"_")+2);
+		$cmd = $this->getCmd(null, 'state');
+		$wes_eqLogic->getUrl('program.cgi?PRG='.$compteurId.','.($wesid+100).',0,0,1,0,1,2,0,1,4,0000,0000,9,0');
+		$wesid = sprintf("%03d", $wesid);
+		$wes_eqLogic->getUrl('program.cgi?RQT'.$compteurId.'='.$pathjeedom.'core/api/jeeApi.php?api='.config::byKey('api').'%26type=wes_relai%26id='.$cmd->getId().'%26value=$R'.$wesid);
+		$compteurId++;
+		$wes_eqLogic->getUrl('program.cgi?PRG='.$compteurId.','.($wesid+100).',0,0,0,0,1,2,0,1,4,0000,0000,9,0');
+		$wesid = sprintf("%03d", $wesid);
+		$wes_eqLogic->getUrl('program.cgi?RQT'.$compteurId.'='.$pathjeedom.'core/api/jeeApi.php?api='.config::byKey('api').'%26type=wes_relai%26id='.$cmd->getId().'%26value=$R'.$wesid);
+		return $compteurId;
 	}
 
     public function getLinkToConfiguration() {
@@ -156,9 +143,9 @@ class wes_relaiCmd extends cmd
 		$weseqLogic = eqLogic::byId(substr ($eqLogic->getLogicalId(), 0, strpos($eqLogic->getLogicalId(),"_")));
 		$wesid = substr($eqLogic->getLogicalId(), strpos($eqLogic->getLogicalId(),"_")+2);
 		if ( $this->getLogicalId() == 'btn_on' )
-			$file .= 'RL.cgi?rl'.($wesid+1).'=ON';
+			$file .= 'RL.cgi?rl'.($wesid).'=ON';
 		else if ( $this->getLogicalId() == 'btn_off' )
-			$file .= 'RL.cgi?rl'.($wesid+1).'=OFF';
+			$file .= 'RL.cgi?rl'.($wesid).'=OFF';
 /*		else if ( $this->getLogicalId() == 'impulsion' )
 			$file .= 'preset.htm?RLY'.($wesid+1).'=1';
 		else if ( $this->getLogicalId() == 'commute' )
@@ -184,7 +171,7 @@ class wes_relaiCmd extends cmd
 		$eqLogic = $this->getEqLogic();
 		$wesid = substr($eqLogic->getLogicalId(), strpos($eqLogic->getLogicalId(),"_")+2);
 		$url = 'http';
-		if ( $_SERVER['HTTPS'] == "on" )
+		if (  isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on" )
 			$url .= 's';
 		$url .= '://'.config::byKey('internalAddr').$pathjeedom.'core/api/jeeApi.php?api='.config::byKey('api').'&type=wes_relai&id='.$this->getId().'&value=';
 		if ( $this->getLogicalId() == 'state' ) {

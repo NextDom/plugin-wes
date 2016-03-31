@@ -19,7 +19,7 @@ $eqLogics = eqLogic::byType('wes');
 						echo '<ul id="ul_eqLogic" class="nav nav-list bs-sidenav sub-nav-list" data-eqLogic_id="' . $eqLogic->getId() . '" style="display: none;">'."\n";
 							echo '<li>'."\n";
 								echo '<i class="fa fa-line-chart cursor eqLogicAction" data-action="hide" data-eqLogic_id="temperature_' . $eqLogic->getId() . '"></i>'."\n";
-								echo '<a class="cursor eqLogicAction" data-action="hide" style="display: inline;" data-eqLogic_id="temperature_' . $eqLogic->getId() . '" data-eqLogic_type="wes">{{Entrée temperature}}</a>'."\n";
+								echo '<a class="cursor eqLogicAction" data-action="hide" style="display: inline;" data-eqLogic_id="temperature_' . $eqLogic->getId() . '" data-eqLogic_type="wes">{{Entrée analogiques 1-Wire}}</a>'."\n";
 								echo '<ul id="ul_eqLogic" class="nav nav-list bs-sidenav sub-nav-list" data-eqLogic_id="temperature_' . $eqLogic->getId() . '" style="display: none;">'."\n";
 									$compteurId = 1;
 									$SubeqLogic = eqLogic::byLogicalId($eqLogic->getId()."_A".$compteurId, 'wes_temperature');
@@ -34,15 +34,38 @@ $eqLogics = eqLogic::byType('wes');
 								echo '<i class="fa fa-plug cursor eqLogicAction" data-action="hide" data-eqLogic_id="relai_' . $eqLogic->getId() . '"></i>'."\n";
 								echo '<a class="cursor eqLogicAction" data-action="hide" style="display: inline;" data-eqLogic_id="relai_' . $eqLogic->getId() . '" data-eqLogic_type="wes">{{Relai}}</a>'."\n";
 								echo '<ul id="ul_eqLogic" class="nav nav-list bs-sidenav sub-nav-list" data-eqLogic_id="relai_' . $eqLogic->getId() . '" style="display: none;">'."\n";
-									$compteurId = 1;
-									$SubeqLogic = eqLogic::byLogicalId($eqLogic->getId()."_R".$compteurId, 'wes_relai');
-									while ( is_object($SubeqLogic) ) {
-										echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $SubeqLogic->getId() . '" data-eqLogic_type="wes_relai"><a>' . $SubeqLogic->getName() . '</a></li>'."\n";
-										$compteurId ++;
+									for ($compteurId = 1; $compteurId <= 2; $compteurId++) {
 										$SubeqLogic = eqLogic::byLogicalId($eqLogic->getId()."_R".$compteurId, 'wes_relai');
+										echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $SubeqLogic->getId() . '" data-eqLogic_type="wes_relai"><a>' . $SubeqLogic->getName() . '</a></li>'."\n";
 									}
 								echo '</ul>'."\n";
 							echo '</li>'."\n";
+							$SubeqLogic = eqLogic::byLogicalId($eqLogic->getId()."_R101", 'wes_relai');
+							if ( is_object($SubeqLogic) ) {
+								echo '<li>'."\n";
+									echo '<i class="fa fa-plug cursor eqLogicAction" data-action="hide" data-eqLogic_id="relai1w_' . $eqLogic->getId() . '"></i>'."\n";
+									echo '<a class="cursor eqLogicAction" data-action="hide" style="display: inline;" data-eqLogic_id="relai1w_' . $eqLogic->getId() . '" data-eqLogic_type="wes">{{Relai 1-Wire}}</a>'."\n";
+									echo '<ul id="ul_eqLogic" class="nav nav-list bs-sidenav sub-nav-list" data-eqLogic_id="relai1w_' . $eqLogic->getId() . '" style="display: none;">'."\n";
+										for ($compteurId = 1; $compteurId <= 9; $compteurId++) {
+											$SubeqLogic = eqLogic::byLogicalId($eqLogic->getId()."_R".$compteurId."01", 'wes_relai');
+											if ( is_object($SubeqLogic) ) {
+												echo '<li>'."\n";
+													echo '<i class="fa fa-plug cursor eqLogicAction" data-action="hide" data-eqLogic_id="relai1w_'.$compteurId.'_' . $eqLogic->getId() . '"></i>'."\n";
+													echo '<a class="cursor eqLogicAction" data-action="hide" style="display: inline;" data-eqLogic_id="relai1w_'.$compteurId.'_' . $eqLogic->getId() . '" data-eqLogic_type="wes">{{Carte '.$compteurId.'}}</a>'."\n";
+													echo '<ul id="ul_eqLogic" class="nav nav-list bs-sidenav sub-nav-list" data-eqLogic_id="relai1w_'.$compteurId.'_' . $eqLogic->getId() . '" style="display: none;">'."\n";
+														for ($souscompteurId = 1; $souscompteurId <= 8; $souscompteurId++) {
+															$SubeqLogic = eqLogic::byLogicalId($eqLogic->getId()."_R".$compteurId.sprintf("%02d", $souscompteurId), 'wes_relai');
+															if ( is_object($SubeqLogic) ) {
+																echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $SubeqLogic->getId() . '" data-eqLogic_type="wes_relai"><a>' . $SubeqLogic->getName() . '</a></li>'."\n";
+															}
+														}
+													echo '</ul>'."\n";
+												echo '</li>'."\n";
+											}
+										}
+									echo '</ul>'."\n";
+								echo '</li>'."\n";
+							}
 							echo '<li>'."\n";
 								echo '<i class="fa fa-twitch cursor eqLogicAction" data-action="hide" data-eqLogic_id="bouton_' . $eqLogic->getId() . '"></i>'."\n";
 								echo '<a class="cursor eqLogicAction" data-action="hide" style="display: inline;" data-eqLogic_id="bouton_' . $eqLogic->getId() . '" data-eqLogic_type="wes">{{Entrée numérique}}</a>'."\n";
@@ -71,7 +94,7 @@ $eqLogics = eqLogic::byType('wes');
 							echo '</li>'."\n";
 							echo '<li>'."\n";
 								echo '<i class="icon nourriture-apron cursor eqLogicAction" data-action="hide" data-eqLogic_id="pince_' . $eqLogic->getId() . '"></i>'."\n";
-								echo '<a class="cursor eqLogicAction" data-action="hide" style="display: inline;" data-eqLogic_id="pince_' . $eqLogic->getId() . '" data-eqLogic_type="wes">{{Pince}}</a>'."\n";
+								echo '<a class="cursor eqLogicAction" data-action="hide" style="display: inline;" data-eqLogic_id="pince_' . $eqLogic->getId() . '" data-eqLogic_type="wes">{{Pince ampèremétrique}}</a>'."\n";
 								echo '<ul id="ul_eqLogic" class="nav nav-list bs-sidenav sub-nav-list" data-eqLogic_id="pince_' . $eqLogic->getId() . '" style="display: none;">'."\n";
 									$compteurId = 1;
 									$SubeqLogic = eqLogic::byLogicalId($eqLogic->getId()."_P".$compteurId, 'wes_pince');
@@ -186,6 +209,7 @@ $eqLogics = eqLogic::byType('wes');
 					<div class="col-sm-10">
 					<input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-label-text="{{Activer}}" data-l1key="isEnable" checked/>
 					<input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-label-text="{{Visible}}" data-l1key="isVisible" checked/>
+					<a class="btn btn-default" id="bt_configPush" title='{{Configurer push}}'><i class="fa fa-wrench"></i></a>
 					<a class="btn btn-default" id="bt_goCarte" title='{{Accéder à la carte}}'><i class="fa fa-cogs"></i></a>
 					</div>
                 </div>

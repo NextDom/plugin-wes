@@ -88,7 +88,7 @@ class wes extends eqLogic {
 		$cron->save();
 	}
 
-	public function getUrl($file) {
+	public function getUrl($file, $postarg = "") {
 		$url = 'http://';
 		$url .= $this->getConfiguration('ip');
 		if ( $this->getConfiguration('port') != '' )
@@ -101,10 +101,16 @@ class wes extends eqLogic {
 		curl_setopt($process, CURLOPT_TIMEOUT, 30);
 		curl_setopt($process, CURLOPT_RETURNTRANSFER, TRUE);
 		log::add('wes','debug','Url '.$url.'/'.$file);
+		if ( $postarg != "" ) {
+			log::add('wes','debug','Post '.$postarg);
+			curl_setopt($process, CURLOPT_POST, 1);
+			curl_setopt($process, CURLOPT_POSTFIELDS, $postarg);
+		}
 		$return = curl_exec($process);
 		curl_close($process);
 		if ( $return === false )
 			throw new Exception(__('Le wes ne repond pas.',__FILE__));
+		usleep (50);
 		return $return;
 	}
 
@@ -156,6 +162,31 @@ class wes extends eqLogic {
 			$compteurId ++;
 			$status = $this->xmlstatus->xpath('//temp/SONDE'.$compteurId);
 		}
+		$this->xmlstatus = simplexml_load_string($this->getUrl('data.cgx'));
+		for ($compteurId = 1; $compteurId <= 9; $compteurId++) {
+			$status = $this->xmlstatus->xpath('//relais1W/RELAIS'.$compteurId."01");
+			if ( count($status) != 0 ) {
+				for ($souscompteurId = 1; $souscompteurId <= 8; $souscompteurId++) {
+					if ( ! is_object(self::byLogicalId($this->getId()."_R".$compteurId.sprintf("%02d", $souscompteurId), 'wes_relai')) ) {
+						log::add('wes','debug','Creation relai : '.$this->getId().'_R'.$compteurId.sprintf("%02d", $souscompteurId));
+						$eqLogic = new wes_relai();
+						$eqLogic->setLogicalId($this->getId().'_R'.$compteurId.sprintf("%02d", $souscompteurId));
+						$eqLogic->setName('Relai ' . $compteurId.sprintf("%02d", $souscompteurId));
+						$eqLogic->save();
+					}
+				}
+			}
+			else {
+				for ($souscompteurId = 1; $souscompteurId <= 8; $souscompteurId++) {
+					$eqLogic = self::byLogicalId($this->getId()."_R".$compteurId.sprintf("%02d", $souscompteurId), 'wes_relai');
+					if ( is_object($eqLogic) ) {
+						log::add('wes','debug','Suppression relai : '.$this->getId().'_R'.$compteurId.sprintf("%02d", $souscompteurId));
+						$eqLogic->remove();
+					}
+				}
+			}
+		}
+
 		for ($compteurId = 1; $compteurId <= 2; $compteurId++) {
 			if ( ! is_object(self::byLogicalId($this->getId()."_R".$compteurId, 'wes_relai')) ) {
 				log::add('wes','debug','Creation relai : '.$this->getId().'_R'.$compteurId);
@@ -298,10 +329,12 @@ class wes extends eqLogic {
 		}
 	}
 
-	public function configPush($ipjeedom, $pathjeedom) {
-		if ( $ipjeedom == "" ) {
-			throw new Exception(__('L\'adresse IP du serveur Jeedom doit être renseignée.',__FILE__));
+	public function configPush() {
+		if ( config::byKey("internalAddr") == "" || config::byKey("internalPort") == "" )
+		{
+			throw new Exception(__('L\'adresse IP ou le port local de jeedom ne sont pas définit (Administration => Configuration réseaux => Accès interne).', __FILE__));
 		}
+		$pathjeedom = config::byKey("internalComplement");
 		if ( substr($pathjeedom, 0, 1) != "/" ) {
 			$pathjeedom = "/".$pathjeedom;
 		}
@@ -309,13 +342,16 @@ class wes extends eqLogic {
 			$pathjeedom = $pathjeedom."/";
 		}
 		if ( $this->getIsEnable() ) {
-			foreach (explode(',', init('eqLogicPush_id')) as $_eqLogic_id) {
+			$this->getUrl('rqthttp.cgi', 'RQd5='.config::byKey("internalAddr").'&RQp5='.config::byKey("internalPort"));
+			$compteurId=0;
+ 			foreach (explode(',', init('eqLogicPush_id')) as $_eqLogic_id) {
 				$eqLogic = eqLogic::byId($_eqLogic_id);
 				if (!is_object($eqLogic)) {
 					throw new Exception(__('Impossible de trouver l\'équipement : ', __FILE__) . $_eqLogic_id);
 				}
 				if ( method_exists($eqLogic, "configPush" ) ) {
-					$eqLogic->configPush($this->getUrl(), $ipjeedom, $pathjeedom);
+					$compteurId = $eqLogic->configPush($this, $compteurId, $pathjeedom);
+					$compteurId++;
 				}
 			}
 		}
@@ -356,16 +392,31 @@ class wes extends eqLogic {
 			foreach (self::byType('wes_relai') as $eqLogicRelai) {
 				if ( $eqLogicRelai->getIsEnable() && substr($eqLogicRelai->getLogicalId(), 0, strpos($eqLogicRelai->getLogicalId(),"_")) == $this->getId() ) {
 					$wesid = substr($eqLogicRelai->getLogicalId(), strpos($eqLogicRelai->getLogicalId(),"_")+2);
-					$xpathModele = '//relais/RELAIS'.$wesid;
-					$status = $this->xmlstatus->xpath($xpathModele);
-					
-					if ( count($status) != 0 )
-					{
-						$eqLogic_cmd = $eqLogicRelai->getCmd(null, 'state');
-						if ($eqLogic_cmd->execCmd(null, 2) != $eqLogic_cmd->formatValue($status[0])) {
-							log::add('wes','debug',"Change state off ".$eqLogicRelai->getName());
-							$eqLogic_cmd->setCollectDate('');
-							$eqLogic_cmd->event($status[0]);
+					if ( $wesid < 10 ) {
+						$xpathModele = '//relais/RELAIS'.$wesid;
+						$status = $this->xmlstatus->xpath($xpathModele);
+						
+						if ( count($status) != 0 )
+						{
+							$eqLogic_cmd = $eqLogicRelai->getCmd(null, 'state');
+							if ($eqLogic_cmd->execCmd(null, 2) != $eqLogic_cmd->formatValue($status[0])) {
+								log::add('wes','debug',"Change state off ".$eqLogicRelai->getName());
+								$eqLogic_cmd->setCollectDate('');
+								$eqLogic_cmd->event($status[0]);
+							}
+						}
+					} else {
+						$xpathModele = '//relais1W/RELAIS'.$wesid;
+						$status = $this->xmlstatus->xpath($xpathModele);
+						
+						if ( count($status) != 0 )
+						{
+							$eqLogic_cmd = $eqLogicRelai->getCmd(null, 'state');
+							if ($eqLogic_cmd->execCmd(null, 2) != $eqLogic_cmd->formatValue($status[0])) {
+								log::add('wes','debug',"Change state off ".$eqLogicRelai->getName());
+								$eqLogic_cmd->setCollectDate('');
+								$eqLogic_cmd->event($status[0]);
+							}
 						}
 					}
 				}
@@ -412,24 +463,31 @@ class wes extends eqLogic {
 					
 					if ( count($status) != 0 )
 					{
-						$eqLogic_cmd = $eqLogicCompteur->getCmd(null, 'index');
-						if ($eqLogic_cmd->execCmd(null, 2) != $eqLogic_cmd->formatValue($status[0])) {
-							log::add('wes','debug',"Change index ".$eqLogicCompteur->getName());
+						$nbimpulsion_cmd = $eqLogicCompteur->getCmd(null, 'nbimpulsion');
+						$nbimpulsion = $nbimpulsion_cmd->execCmd(null, 2);
+						$nbimpulsionminute_cmd = $eqLogicCompteur->getCmd(null, 'nbimpulsionminute');
+						if ( $nbimpulsion != $status[0] ) {
+							log::add('wes','debug',"Change nbimpulsion off ".$eqLogicCompteur->getName());
+							if ( $nbimpulsion_cmd->getCollectDate() == '' ) {
+								log::add('wes','debug',"Change nbimpulsionminute 0");
+								$nbimpulsionminute = 0;
+							} else {
+								if ( $status[0] > $nbimpulsion ) {
+									log::add('wes','debug',"Change nbimpulsionminute round ((".$status[0]." - ".$nbimpulsion.")/(".time()." - strtotime(".$nbimpulsion_cmd->getCollectDate()."))*60, 6) = ".round (($status[0] - $nbimpulsion)/(time() - strtotime($nbimpulsion_cmd->getCollectDate()))*60, 6));
+									$nbimpulsionminute = round (($status[0] - $nbimpulsion)/(time() - strtotime($nbimpulsion_cmd->getCollectDate()))*60, 6);
+								} else {
+									log::add('wes','debug',"Change nbimpulsionminute round (".$status[0]."/(".time()." - strtotime(".$nbimpulsionminute_cmd->getCollectDate().")*60), 6) = ".round ($status[0]/(time() - strtotime($nbimpulsionminute_cmd->getCollectDate())*60), 6));
+									$nbimpulsionminute = round ($status[0]/(time() - strtotime($nbimpulsionminute_cmd->getCollectDate())*60), 6);
+								}
+							}
+							$nbimpulsionminute_cmd->setCollectDate(date('Y-m-d H:i:s'));
+							$nbimpulsionminute_cmd->event($nbimpulsionminute);
+						} else {
+							$nbimpulsionminute_cmd->setCollectDate(date('Y-m-d H:i:s'));
+							$nbimpulsionminute_cmd->event(0);
 						}
-						$eqLogic_cmd->setCollectDate('');
-						$eqLogic_cmd->event($status[0]);
-					}
-					$xpathModele = '//impulsion/PULSE'.$wesid;
-					$status = $this->xmlstatus->xpath($xpathModele);
-					
-					if ( count($status) != 0 )
-					{
-						$eqLogic_cmd = $eqLogicCompteur->getCmd(null, 'debit');
-						if ($eqLogic_cmd->execCmd(null, 2) != $eqLogic_cmd->formatValue($status[0])) {
-							log::add('wes','debug',"Change debit ".$eqLogicCompteur->getName());
-						}
-						$eqLogic_cmd->setCollectDate('');
-						$eqLogic_cmd->event($status[0]);
+						$nbimpulsion_cmd->setCollectDate(date('Y-m-d H:i:s'));
+						$nbimpulsion_cmd->event($status[0]);
 					}
 				}
 			}
