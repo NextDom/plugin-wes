@@ -1,5 +1,7 @@
 [horizontal]
 1.7:: Ajout de bouton pour paramétrer le retour des changements d'état par push.
++
+Prise en charge des extensions 8 relais 1-Wire
 
 1.6:: Mise a jour des entrées analogiques, sonde, téléinfo, même si la valeur ne change pas pour les graphiques.
 
