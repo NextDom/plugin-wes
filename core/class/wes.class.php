@@ -468,18 +468,25 @@ class wes extends eqLogic {
 						$nbimpulsionminute_cmd = $eqLogicCompteur->getCmd(null, 'nbimpulsionminute');
 						if ( $nbimpulsion != $status[0] ) {
 							log::add('wes','debug',"Change nbimpulsion off ".$eqLogicCompteur->getName());
-							if ( $nbimpulsion_cmd->getCollectDate() == '' ) {
+							$lastCollectDate = $nbimpulsion_cmd->getCollectDate();
+							if ( $lastCollectDate == '' ) {
 								log::add('wes','debug',"Change nbimpulsionminute 0");
 								$nbimpulsionminute = 0;
 							} else {
-								if ( $status[0] > $nbimpulsion ) {
-									log::add('wes','debug',"Change nbimpulsionminute round ((".$status[0]." - ".$nbimpulsion.")/(".time()." - strtotime(".$nbimpulsion_cmd->getCollectDate()."))*60, 6) = ".round (($status[0] - $nbimpulsion)/(time() - strtotime($nbimpulsion_cmd->getCollectDate()))*60, 6));
-									$nbimpulsionminute = round (($status[0] - $nbimpulsion)/(time() - strtotime($nbimpulsion_cmd->getCollectDate()))*60, 6);
+								$DeltaSeconde = (time() - strtotime($lastCollectDate))*60;
+								if ( $DeltaSeconde != 0 )
+								{
+									if ( $status[0] > $nbimpulsion ) {
+										$DeltaValeur = $status[0] - $nbimpulsion;
+									} else {
+										$DeltaValeur = $status[0];
+									}
+									$nbimpulsionminute = round (($status[0] - $nbimpulsion)/(time() - strtotime($lastCollectDate))*60, 6);
 								} else {
-									log::add('wes','debug',"Change nbimpulsionminute round (".$status[0]."/(".time()." - strtotime(".$nbimpulsionminute_cmd->getCollectDate().")*60), 6) = ".round ($status[0]/(time() - strtotime($nbimpulsionminute_cmd->getCollectDate())*60), 6));
-									$nbimpulsionminute = round ($status[0]/(time() - strtotime($nbimpulsionminute_cmd->getCollectDate())*60), 6);
+									$nbimpulsionminute = 0;
 								}
 							}
+							log::add('wes','debug',"Change nbimpulsionminute ".$nbimpulsionminute);
 							$nbimpulsionminute_cmd->setCollectDate(date('Y-m-d H:i:s'));
 							$nbimpulsionminute_cmd->event($nbimpulsionminute);
 						} else {

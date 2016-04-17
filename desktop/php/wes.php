@@ -36,7 +36,9 @@ $eqLogics = eqLogic::byType('wes');
 								echo '<ul id="ul_eqLogic" class="nav nav-list bs-sidenav sub-nav-list" data-eqLogic_id="relai_' . $eqLogic->getId() . '" style="display: none;">'."\n";
 									for ($compteurId = 1; $compteurId <= 2; $compteurId++) {
 										$SubeqLogic = eqLogic::byLogicalId($eqLogic->getId()."_R".$compteurId, 'wes_relai');
-										echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $SubeqLogic->getId() . '" data-eqLogic_type="wes_relai"><a>' . $SubeqLogic->getName() . '</a></li>'."\n";
+										if ( is_object($SubeqLogic) ) {
+											echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $SubeqLogic->getId() . '" data-eqLogic_type="wes_relai"><a>' . $SubeqLogic->getName() . '</a></li>'."\n";
+										}
 									}
 								echo '</ul>'."\n";
 							echo '</li>'."\n";
