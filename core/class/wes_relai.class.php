@@ -58,7 +58,7 @@ class wes_relai extends eqLogic {
 			$btn_off->setEventOnly(1);
 			$btn_off->save();
 		}
-/*        $commute = $this->getCmd(null, 'commute');
+        $commute = $this->getCmd(null, 'commute');
         if ( ! is_object($commute) ) {
             $commute = new wes_relaiCmd();
 			$commute->setName('Commute');
@@ -69,7 +69,7 @@ class wes_relai extends eqLogic {
 			$commute->setEventOnly(1);
 			$commute->save();
 		}
-        $impulsion = $this->getCmd(null, 'impulsion');
+/*        $impulsion = $this->getCmd(null, 'impulsion');
         if ( ! is_object($impulsion) ) {
             $impulsion = new wes_relaiCmd();
 			$impulsion->setName('Impulsion');
@@ -85,6 +85,18 @@ class wes_relai extends eqLogic {
 
 	public function postUpdate()
 	{
+        $commute = $this->getCmd(null, 'commute');
+        if ( ! is_object($commute) ) {
+            $commute = new wes_relaiCmd();
+			$commute->setName('Commute');
+			$commute->setEqLogic_id($this->getId());
+			$commute->setType('action');
+			$commute->setSubType('other');
+			$commute->setLogicalId('commute');
+			$commute->setEventOnly(1);
+			$commute->save();
+		}
+
 	}
 
 	public function preInsert()
@@ -147,9 +159,9 @@ class wes_relaiCmd extends cmd
 		else if ( $this->getLogicalId() == 'btn_off' )
 			$file .= 'RL.cgi?rl'.($wesid).'=OFF';
 /*		else if ( $this->getLogicalId() == 'impulsion' )
-			$file .= 'preset.htm?RLY'.($wesid+1).'=1';
+			$file .= 'preset.htm?RLY'.($wesid+1).'=1';*/
 		else if ( $this->getLogicalId() == 'commute' )
-			$file .= 'leds.cgi?led='.$wesid;*/
+			$file .= 'RL.cgi?frl='.$wesid;
 		else
 			return false;
 		$weseqLogic->getUrl($file);
