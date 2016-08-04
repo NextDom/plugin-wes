@@ -161,11 +161,11 @@ class wes_boutonCmd extends cmd
 		else
 			return false;
 			
-		$result = file_get_contents($url);
+		$result = @file_get_contents($url);
 		log::add('wes','debug',"get ".preg_replace("/:[^:]*@/", ":XXXX@", $url));
 		$count = 0;
 		while ( $result === false && $count < 3 ) {
-			$result = file_get_contents($url);
+			$result = @file_get_contents($url);
 			$count++;
 		}
 		if ( $result === false ) {
