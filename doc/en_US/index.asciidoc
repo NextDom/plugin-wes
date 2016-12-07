@@ -1,4 +1,4 @@
-== Présentation ==
+== Introduction ==
 Ce plugin permet de gérer les cartes WES.
 
 Initialement, ce plugin a été créé pour connecter les WES.
