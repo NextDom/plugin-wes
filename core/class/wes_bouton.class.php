@@ -113,7 +113,7 @@ class wes_bouton extends eqLogic {
         if (!is_object($cmd)) {
             throw new Exception('Commande ID virtuel inconnu : ' . init('id'));
         }
-		if ($cmd->execCmd(null, 2) != $cmd->formatValue(init('state'))) {
+		if ($cmd->execCmd() != $cmd->formatValue(init('state'))) {
 			$cmd->setCollectDate('');
 			$cmd->event(init('state'));
 		}

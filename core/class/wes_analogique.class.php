@@ -87,7 +87,7 @@ class wes_analogique extends eqLogic {
         if (!is_object($cmd)) {
             throw new Exception('Commande ID virtuel inconnu : ' . init('id'));
         }
-		if ($cmd->execCmd(null, 2) != $cmd->formatValue(init('voltage'))) {
+		if ($cmd->execCmd() != $cmd->formatValue(init('voltage'))) {
 			$cmd->setCollectDate('');
 			$cmd->event(init('voltage'));
 		}

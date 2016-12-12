@@ -382,7 +382,7 @@ class wes extends eqLogic {
 					$statuscmd->setCollectDate('');
 					$statuscmd->event(0);
 				}
-				log::add('wes','error',__('Le wes ne repond pas.',__FILE__)." ".$eqLogic->getName()." get data.cgx");
+				log::add('wes','error',__('Le wes ne repond pas.',__FILE__)." ".$this->getName()." get data.cgx");
 				return false;
 			}
 			if ($statuscmd->execCmd() != 1) {
@@ -399,7 +399,7 @@ class wes extends eqLogic {
 						if ( count($status) != 0 )
 						{
 							$eqLogic_cmd = $eqLogicRelai->getCmd(null, 'state');
-							if ($eqLogic_cmd->execCmd(null, 2) != $eqLogic_cmd->formatValue($status[0])) {
+							if ($eqLogic_cmd->execCmd() != $eqLogic_cmd->formatValue($status[0])) {
 								log::add('wes','debug',"Change state off ".$eqLogicRelai->getName());
 								$eqLogic_cmd->setCollectDate('');
 								$eqLogic_cmd->event($status[0]);
@@ -412,7 +412,7 @@ class wes extends eqLogic {
 						if ( count($status) != 0 )
 						{
 							$eqLogic_cmd = $eqLogicRelai->getCmd(null, 'state');
-							if ($eqLogic_cmd->execCmd(null, 2) != $eqLogic_cmd->formatValue($status[0])) {
+							if ($eqLogic_cmd->execCmd() != $eqLogic_cmd->formatValue($status[0])) {
 								log::add('wes','debug',"Change state off ".$eqLogicRelai->getName());
 								$eqLogic_cmd->setCollectDate('');
 								$eqLogic_cmd->event($status[0]);
@@ -430,7 +430,7 @@ class wes extends eqLogic {
 					if ( count($status) != 0 )
 					{
 						$eqLogic_cmd = $eqLogicBouton->getCmd(null, 'state');
-						if ($eqLogic_cmd->execCmd(null, 2) != $eqLogic_cmd->formatValue($status[0])) {
+						if ($eqLogic_cmd->execCmd() != $eqLogic_cmd->formatValue($status[0])) {
 							log::add('wes','debug',"Change state off ".$eqLogicBouton->getName());
 							$eqLogic_cmd->setCollectDate('');
 							$eqLogic_cmd->event($status[0]);
@@ -447,7 +447,7 @@ class wes extends eqLogic {
 					if ( count($status) != 0 )
 					{
 						$eqLogic_cmd = $eqLogictemperature->getCmd(null, 'reel');
-						if ($eqLogic_cmd->execCmd(null, 2) != $eqLogic_cmd->formatValue($status[0])) {
+						if ($eqLogic_cmd->execCmd() != $eqLogic_cmd->formatValue($status[0])) {
 							log::add('wes','debug',"Change reel ".$eqLogictemperature->getName());
 						}
 						$eqLogic_cmd->setCollectDate('');
@@ -464,7 +464,7 @@ class wes extends eqLogic {
 					if ( count($status) != 0 )
 					{
 						$nbimpulsion_cmd = $eqLogicCompteur->getCmd(null, 'nbimpulsion');
-						$nbimpulsion = $nbimpulsion_cmd->execCmd(null, 2);
+						$nbimpulsion = $nbimpulsion_cmd->execCmd();
 						$nbimpulsionminute_cmd = $eqLogicCompteur->getCmd(null, 'nbimpulsionminute');
 						if ( $nbimpulsion != $status[0] ) {
 							log::add('wes','debug',"Change nbimpulsion off ".$eqLogicCompteur->getName());
@@ -507,7 +507,7 @@ class wes extends eqLogic {
 					if ( count($status) != 0 )
 					{
 						$eqLogic_cmd = $eqLogicPince->getCmd(null, 'intensite');
-						if ($eqLogic_cmd->execCmd(null, 2) != $eqLogic_cmd->formatValue($status[0])) {
+						if ($eqLogic_cmd->execCmd() != $eqLogic_cmd->formatValue($status[0])) {
 							log::add('wes','debug',"Change intensite ".$eqLogicPince->getName());
 						}
 						$eqLogic_cmd->setCollectDate('');
@@ -519,7 +519,7 @@ class wes extends eqLogic {
 					if ( count($status) != 0 )
 					{
 						$eqLogic_cmd = $eqLogicPince->getCmd(null, 'puissance');
-						if ($eqLogic_cmd->execCmd(null, 2) != $eqLogic_cmd->formatValue($status[0])) {
+						if ($eqLogic_cmd->execCmd() != $eqLogic_cmd->formatValue($status[0])) {
 							log::add('wes','debug',"Change puissance ".$eqLogicPince->getName());
 						}
 						$eqLogic_cmd->setCollectDate('');
@@ -579,7 +579,7 @@ class wes extends eqLogic {
 					if ( count($status) != 0 )
 					{
 						$eqLogic_cmd = $eqLogicCompteur->getCmd(null, 'brut');
-						if ($eqLogic_cmd->execCmd(null, 2) != $eqLogic_cmd->formatValue($status[0])) {
+						if ($eqLogic_cmd->execCmd() != $eqLogic_cmd->formatValue($status[0])) {
 							log::add('wes','debug',"Change brut ".$eqLogicCompteur->getName());
 						}
 						$eqLogic_cmd->setCollectDate('');
@@ -637,8 +637,8 @@ class wesCmd extends cmd
 		{
 		$result = $eqLogic->getUrl($url.'?'.http_build_query($data));
 			if ( $count < 3 ) {
-				log::add('wes','error',__('Le wes ne repond pas.',__FILE__)." ".$eqLogic->getName()." get ".$url."?".http_build_query($data));
-				throw new Exception(__('Le wes ne repond pas.',__FILE__)." ".$eqLogic->getName());
+				log::add('wes','error',__('Le wes ne repond pas.',__FILE__)." ".$this->getName()." get ".$url."?".http_build_query($data));
+				throw new Exception(__('Le wes ne repond pas.',__FILE__)." ".$this->getName());
 			}
 			$count ++;
 		}
