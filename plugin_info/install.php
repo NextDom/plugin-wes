@@ -32,6 +32,7 @@ function wes_install() {
 	}
 	config::save('temporisation_lecture', 60, 'wes');
 	$cron->start();
+	config::save('subClass', 'wes_temperature;wes_relai;wes_bouton;wes_compteur;wes_teleinfo;wes_pince;wes_analogique', 'wes');
 }
 
 function wes_update() {
@@ -73,6 +74,7 @@ function wes_update() {
 	foreach (eqLogic::byType('wes') as $eqLogic) {
 		$eqLogic->save();
 	}
+	config::save('subClass', 'wes_temperature;wes_relai;wes_bouton;wes_compteur;wes_teleinfo;wes_pince;wes_analogique', 'wes');
 }
 
 function wes_remove() {
@@ -80,5 +82,6 @@ function wes_remove() {
     if (is_object($cron)) {
         $cron->remove();
     }
+	config::remove('subClass', 'wes');
 }
 ?>
