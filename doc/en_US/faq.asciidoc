@@ -25,3 +25,8 @@ link:https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WTPHTM
 --
 Il est nécessaire de sauvegarder de nouveau la carte wes dans jeedom.
 --
+
+.J'aimerai remonter des erreurs/modifications directement dans le code ?
+--
+C'est tout à fait possible via https://github.com/guenneguezt/plugin-wes[github]
+--
