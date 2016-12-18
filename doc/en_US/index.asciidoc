@@ -1,5 +1,5 @@
 == Introduction ==
-Ce plugin permet de gérer les cartes WES.
+This plugin is used to manage WES cards.
 
 Initially, this plugin was created to connect the WES
 
@@ -20,11 +20,11 @@ Puis saisir le nom de l'équipement (ex. wes 1)
 
 Puis définir :
 
-* '''Objet parent'''
-* '''Catégorie '''(optionnelle)
+* '''Parent object'''
+* '''Optional  Category '''
 * '''Activer '''(à cocher, sinon l’équipement ne sera pas utilisable)
-* '''Visible '''(optionel si vous ne désirez pas le rendre visible sur le Dashboard)
-* '''Adresse IP'''
+* *Visible*: makes your equipment visible on the dashboard.
+* '''IP Adress'''
 * '''Port'''
 * '''Compte'''
 * '''Mot de passe'''

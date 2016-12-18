@@ -1,45 +1,45 @@
-== Présentation ==
-Ce plugin permet de gérer les cartes WES.
+== Präsentation ==
+Dieses Plugin ermöglicht es Ihnen die WES-Karten zu verwalten.
 
-Initialement, ce plugin a été créé pour connecter les WES.
+Zunächst wurde dieses Plugin erstellt, um sich mit WES zu verbinden.
 
-=== Données visibles sur le Dashboard : ===
-* '''les entrée temperatures '''
-* '''les entrée numeriques '''
-* '''les relai '''
-* '''les compteurs d'impulsions'''
-* '''les pinces ampère-métriques'''
-* '''les téléinfos'''
+=== Ersichtliche Daten auf dem Armaturenbrett : ===
+* ''Die Temperatureingänge''
+* ''Die Digitaleingänge''
+* ''Die Relais''
+* ''Die Impulszähler''
+* "Das Zangenamperemeter"
+* "Die Teleinfos"
 
-== Installation/Paramétrage ==
-Nous allons maintenant paramétrer un équipement. Pour se faire, cliquer sur '''Plugins / Protocole domotique / wes'''
+== Installation/Einrichtung ==
+Wir werden jetzt ein Gerät einrichten. Um dort hin zu kommen, klicken Sie auf ''Plugins /  Automatisierungsprotokolle / WES''.
 
-Puis cliquer sur le bouton en haut à gauche "'''Ajouter un équipement'''"
+Dann auf die Schaltfläche oben links "Gerät hinzufügen" klicken
 
-Puis saisir le nom de l'équipement (ex. wes 1)
+Dann den Namen des Gerätes eingeben (z.B. WES 1)
 
-Puis définir :
+Dann definieren :
 
-* '''Objet parent'''
-* '''Catégorie '''(optionnelle)
-* '''Activer '''(à cocher, sinon l’équipement ne sera pas utilisable)
-* '''Visible '''(optionel si vous ne désirez pas le rendre visible sur le Dashboard)
+* ''Eltern-Objekt''
+* "Kategorie" (optional)
+* "Aktivieren" (ankreuzen, andernfalls wird das Gerät nicht nutzbar sein)
+* ''Sichtbar'' (optional, wenn Sie nicht wünschen, dass es auf dem Armaturenbrett sichtbar ist)
 * '''Adresse IP'''
-* '''Port'''
-* '''Compte'''
-* '''Mot de passe'''
+* ''Port''
+* ''Konto''
+* ''Passwort''
 
-Vous retrouverez l'ensemble des élements de la carte dans le menu à gauche en clickant sur l'icone de celle-ci.
+Alle Elemente der Karte finden Sie im Menü auf der linken Seite, durch Klicken auf dieses Symbol.  
 
-=== Frequence de rafraichissement ===
-Les données sont récupéré par le plugin toutes les minutes. Impossible de faire plus fréquent.
+=== Aktualisierungsrate  ===
+Die Daten werden vom Plugin jede Minute gesammelt. Es ist nicht möglich, eine höhere Frequenz zu haben.
 Le push http peut-être activé. Pour celà, il faut cliquer sur
 
 image::../images/bouton_config_push.jpg[]
 
-Ensuite aller en bas et cliquer sur Appliquer.
+Dann gehen Sie nach unten und klicken Sie auf Anwenden.
 
-== Quelques copies d'écran ==
+== Einige Kopien von Bildschirm ==
 image::../images/wes_screenshot1.jpg[align="center"]
 image::../images/wes_screenshot2.jpg[align="center"]
 image::../images/wes_screenshot3.jpg[align="center"]
@@ -47,5 +47,5 @@ image::../images/wes_screenshot3.jpg[align="center"]
 === FAQ
 include::faq.asciidoc[]
 
-== Change log ==
+== Änderungsprotokoll ==
 include::changelog.asciidoc[]
