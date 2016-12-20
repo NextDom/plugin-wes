@@ -46,19 +46,24 @@ function wes_update() {
 		$cron->stop();
 		$cron->remove();
 	}
-	$cron = cron::byClassAndFunction('wes', 'daemon');
-	if (!is_object($cron)) {
-		$cron = new cron();
-		$cron->setClass('wes');
-		$cron->setFunction('daemon');
-		$cron->setEnable(1);
-		$cron->setDeamon(1);
-		$cron->setTimeout(1440);
-		$cron->setSchedule('* * * * *');
-		$cron->save();
+	$daemon = cron::byClassAndFunction('wes', 'daemon');
+	if (!is_object($daemon)) {
+		$daemon = new cron();
+		$daemon->setClass('wes');
+		$daemon->setFunction('daemon');
+		$daemon->setEnable(1);
+		$daemon->setDeamon(1);
+		$daemon->setTimeout(1440);
+		$daemon->setSchedule('* * * * *');
+		$daemon->save();
+		$daemon->start();
+	}
+	else
+	{
+		$daemon->halt();
+		$daemon->start();
 	}
 	config::save('temporisation_lecture', 60, 'wes');
-	$cron->start();
 	foreach (eqLogic::byType('wes_bouton') as $SubeqLogic) {
 		$SubeqLogic->save();
 	}
