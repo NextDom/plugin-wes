@@ -24,7 +24,7 @@ Dann definieren :
 * "Kategorie" (optional)
 * "Aktivieren" (ankreuzen, andernfalls wird das Gerät nicht nutzbar sein)
 * ''Sichtbar'' (optional, wenn Sie nicht wünschen, dass es auf dem Armaturenbrett sichtbar ist)
-* '''Adresse IP'''
+* '''IP Adresse'''
 * ''Port''
 * ''Konto''
 * ''Passwort''
