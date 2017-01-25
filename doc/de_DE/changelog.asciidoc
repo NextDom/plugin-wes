@@ -5,7 +5,7 @@ Prise en charge des extensions 8 relais 1-Wire
 
 1.6:: Mise a jour des entrées analogiques, sonde, téléinfo, même si la valeur ne change pas pour les graphiques.
 
-1.5:: Compatibilité Wes 2
+1.5:: Wes 2 Kompatibilität 
 +
 Prise en charge des entrées analogiques
 

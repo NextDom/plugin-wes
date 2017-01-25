@@ -6,7 +6,7 @@ Il faut dans le menu gauche cliquer sur l'icône suivant pour y avoir accès : i
 
 .Lorsqu'une entrée/sortie change, la mise à jour dans jeedom n'est pas instantané ?
 --
-Non pas encore.
+Noch nicht.
 --
 
 .A quelle fréquence les données sont-elles mise à jour ?
