@@ -60,8 +60,7 @@ function wes_update() {
 	}
 	else
 	{
-		$daemon->halt();
-		$daemon->start();
+		wes::deamon_start();
 	}
 	config::save('temporisation_lecture', 60, 'wes');
 	foreach (eqLogic::byType('wes_bouton') as $SubeqLogic) {

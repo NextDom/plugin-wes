@@ -291,6 +291,7 @@ $eqLogics = eqLogic::byType('wes');
 	<?php include_file('desktop', 'wes_compteur', 'php', 'wes'); ?>
 	<?php include_file('desktop', 'wes_pince', 'php', 'wes'); ?>
 	<?php include_file('desktop', 'wes_teleinfo', 'php', 'wes'); ?>
+	<?php include_file('desktop', 'wes_analogique', 'php', 'wes'); ?>
 </div>
 
 <?php
