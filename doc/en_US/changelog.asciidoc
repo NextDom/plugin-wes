@@ -1,4 +1,6 @@
 [horizontal]
+1.8:: Correction de la gestion des entrées analogiques.
+
 1.7: added button to set up the changes back state by push .
 +
 Prise en charge des extensions 8 relais 1-Wire
