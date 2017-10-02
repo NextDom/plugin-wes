@@ -119,8 +119,15 @@ $('.eqLogicAction[data-action=hide]').on('click', function () {
     return false;
 });
 
-function prePrintEqLogic() {
-	$('.eqLogic').hide();
+function printEqLogic(_eqLogic) {
+	if ( _eqLogic.configuration.type == 'carte' )
+	{
+		$('.carte_only').show();
+	}
+	else
+	{
+		$('.carte_only').hide();
+	}
 }
 
 $('body').delegate('.cmd .cmdAction[data-action=urlpush]', 'click', function (event) {
@@ -190,10 +197,4 @@ $('#bt_ApplyconfigPush').on('click', function() {
     });
 });
 
-$("#table_cmd_wes_temperature").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
-$("#table_cmd_wes_relai").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
-$("#table_cmd_wes_bouton").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
-$("#table_cmd_wes_compteur").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
-$("#table_cmd_wes_pince").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
-$("#table_cmd_wes_teleinfo").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
