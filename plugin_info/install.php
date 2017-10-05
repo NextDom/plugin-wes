@@ -32,7 +32,10 @@ function wes_install() {
 	}
 	config::save('temporisation_lecture', 60, 'wes');
 	$cron->start();
-	config::save('subClass', 'wes_temperature;wes_relai;wes_bouton;wes_compteur;wes_teleinfo;wes_pince;wes_analogique', 'wes');
+	jeedom::getApiKey('wes');
+	if (config::byKey('api::wes::mode') == '') {
+		config::save('api::wes::mode', 'enable');
+	}
 }
 
 function wes_update() {
@@ -62,23 +65,112 @@ function wes_update() {
 	{
 		wes::deamon_start();
 	}
-	config::save('temporisation_lecture', 60, 'wes');
+	$FlagBasculeClass = false;
+	foreach (eqLogic::byType('wes') as $eqLogic) {
+		if ( $eqLogic->getConfiguration('type', '') == '' )
+		{
+			$eqLogic->setConfiguration('type', 'carte');
+			$eqLogic->save();
+			$FlagBasculeClass = true;
+		}
+		foreach (cmd::byEqLogicId($eqLogic->getId()) as $cmd) {
+			if ( $cmd->getEqType() != 'wes')
+			{
+				$cmd->setEqType('wes');
+				$cmd->save();
+				$FlagBasculeClass = true;
+			}
+		}
+	}
 	foreach (eqLogic::byType('wes_bouton') as $SubeqLogic) {
+		$SubeqLogic->setConfiguration('type', 'bouton');
+		$SubeqLogic->setEqType_name('wes');
 		$SubeqLogic->save();
+		foreach (cmd::byEqLogicId($SubeqLogic->getId()) as $cmd) {
+			$cmd->setEqType('wes');
+			$cmd->save();
+		}
+		$FlagBasculeClass = true;
 	}
 	foreach (eqLogic::byType('wes_temperature') as $SubeqLogic) {
+		$SubeqLogic->setConfiguration('type', 'temperature');
+		$SubeqLogic->setEqType_name('wes');
 		$SubeqLogic->save();
+		foreach (cmd::byEqLogicId($SubeqLogic->getId()) as $cmd) {
+			$cmd->setEqType('wes');
+			$cmd->save();
+		}
+		$FlagBasculeClass = true;
 	}
 	foreach (eqLogic::byType('wes_relai') as $SubeqLogic) {
+		$SubeqLogic->setConfiguration('type', 'relai');
+		$SubeqLogic->setEqType_name('wes');
 		$SubeqLogic->save();
+		foreach (cmd::byEqLogicId($SubeqLogic->getId()) as $cmd) {
+			$cmd->setEqType('wes');
+			$cmd->save();
+		}
+		$FlagBasculeClass = true;
 	}
 	foreach (eqLogic::byType('wes_compteur') as $SubeqLogic) {
+		$SubeqLogic->setConfiguration('type', 'compteur');
+		$SubeqLogic->setEqType_name('wes');
 		$SubeqLogic->save();
+		foreach (cmd::byEqLogicId($SubeqLogic->getId()) as $cmd) {
+			$cmd->setEqType('wes');
+			$cmd->save();
+		}
+		$FlagBasculeClass = true;
 	}
-	foreach (eqLogic::byType('wes') as $eqLogic) {
-		$eqLogic->save();
+	foreach (eqLogic::byType('wes_teleinfo') as $SubeqLogic) {
+		$SubeqLogic->setConfiguration('type', 'teleinfo');
+		$SubeqLogic->setEqType_name('wes');
+		$SubeqLogic->save();
+		foreach (cmd::byEqLogicId($SubeqLogic->getId()) as $cmd) {
+			$cmd->setEqType('wes');
+			$cmd->save();
+		}
+		$FlagBasculeClass = true;
 	}
-	config::save('subClass', 'wes_temperature;wes_relai;wes_bouton;wes_compteur;wes_teleinfo;wes_pince;wes_analogique', 'wes');
+	foreach (eqLogic::byType('wes_analogique') as $SubeqLogic) {
+		$SubeqLogic->setConfiguration('type', 'analogique');
+		$SubeqLogic->setEqType_name('wes');
+		$SubeqLogic->save();
+		foreach (cmd::byEqLogicId($SubeqLogic->getId()) as $cmd) {
+			$cmd->setEqType('wes');
+			$cmd->save();
+		}
+		$FlagBasculeClass = true;
+	}
+	foreach (eqLogic::byType('wes_pince') as $SubeqLogic) {
+		$SubeqLogic->setConfiguration('type', 'pince');
+		$SubeqLogic->setEqType_name('wes');
+		$SubeqLogic->save();
+		foreach (cmd::byEqLogicId($SubeqLogic->getId()) as $cmd) {
+			$cmd->setEqType('wes');
+			$cmd->save();
+		}
+		$FlagBasculeClass = true;
+	}
+	foreach (eqLogic::byType('wes_relai') as $SubeqLogic) {
+		$SubeqLogic->setConfiguration('type', 'relai');
+		$SubeqLogic->setEqType_name('wes');
+		$SubeqLogic->save();
+		foreach (cmd::byEqLogicId($SubeqLogic->getId()) as $cmd) {
+			$cmd->setEqType('wes');
+			$cmd->save();
+		}
+		$FlagBasculeClass = true;
+	}
+	if ( $FlagBasculeClass )
+	{
+		log::add('wes','error',__('Les Urls de push ont changer. Pensez à les reconfigurer pour chaque carte.',__FILE__));
+	}
+	config::remove('subClass', 'wes');
+	jeedom::getApiKey('wes');
+	if (config::byKey('api::wes::mode') == '') {
+		config::save('api::wes::mode', 'enable');
+	}
 }
 
 function wes_remove() {
