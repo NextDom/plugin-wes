@@ -765,10 +765,10 @@ class wes extends eqLogic {
 				$wesid = substr($this->getLogicalId(), strpos($this->getLogicalId(),"_")+2);
 				$cmd = $this->getCmd(null, 'state');
 				$parent->getUrl('program.cgi?PRG='.$compteurId.','.($wesid+30).',0,0,1,0,1,2,0,1,4,0000,0000,9,0');
-				$parent->getUrl('program.cgi?RQT'.$compteurId.'='.$pathjeedom.'core/api/jeeApi.php?api='.jeedom::getApiKey('wes').'%26type=wes%26id='.$cmd->getId().'%26value=$I'.$wesid.'00');
+				$parent->getUrl('program.cgi?RQT'.$compteurId.'='.$pathjeedom.'core/api/jeeApi.php?api='.jeedom::getApiKey('wes').'%26plugin=wes%26type=wes%26id='.$cmd->getId().'%26value=$E00'.$wesid);
 				$compteurId++;
 				$parent->getUrl('program.cgi?PRG='.$compteurId.','.($wesid+30).',0,0,0,0,1,2,0,1,4,0000,0000,9,0');
-				$parent->getUrl('program.cgi?RQT'.$compteurId.'='.$pathjeedom.'core/api/jeeApi.php?api='.jeedom::getApiKey('wes').'%26type=wes%26id='.$cmd->getId().'%26value=$I'.$wesid.'00');
+				$parent->getUrl('program.cgi?RQT'.$compteurId.'='.$pathjeedom.'core/api/jeeApi.php?api='.jeedom::getApiKey('wes').'%26plugin=wes%26type=wes%26id='.$cmd->getId().'%26value=$E00'.$wesid);
 				return $compteurId;
 				break;
 			case "temperature":
@@ -778,11 +778,11 @@ class wes extends eqLogic {
 				$cmd = $this->getCmd(null, 'state');
 				$parent->getUrl('program.cgi?PRG='.$compteurId.','.($wesid+100).',0,0,1,0,1,2,0,1,4,0000,0000,9,0');
 				$wesid = sprintf("%03d", $wesid);
-				$parent->getUrl('program.cgi?RQT'.$compteurId.'='.$pathjeedom.'core/api/jeeApi.php?api='.jeedom::getApiKey('wes').'%26type=wes%26id='.$cmd->getId().'%26value=$R'.$wesid);
+				$parent->getUrl('program.cgi?RQT'.$compteurId.'='.$pathjeedom.'core/api/jeeApi.php?api='.jeedom::getApiKey('wes').'%26plugin=wes%26type=wes%26id='.$cmd->getId().'%26value=$R'.$wesid);
 				$compteurId++;
 				$parent->getUrl('program.cgi?PRG='.$compteurId.','.($wesid+100).',0,0,0,0,1,2,0,1,4,0000,0000,9,0');
 				$wesid = sprintf("%03d", $wesid);
-				$parent->getUrl('program.cgi?RQT'.$compteurId.'='.$pathjeedom.'core/api/jeeApi.php?api='.jeedom::getApiKey('wes').'%26type=wes%26id='.$cmd->getId().'%26value=$R'.$wesid);
+				$parent->getUrl('program.cgi?RQT'.$compteurId.'='.$pathjeedom.'core/api/jeeApi.php?api='.jeedom::getApiKey('wes').'%26plugin=wes%26type=wes%26id='.$cmd->getId().'%26value=$R'.$wesid);
 				return $compteurId;
 				break;
 			case "compteur":
