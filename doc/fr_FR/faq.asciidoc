@@ -22,7 +22,7 @@ Il est nécessaire au préalable d'activer temporairement le debug de Jeedom (me
 
 .Pourquoi le plugin est gratuit ?
 --
-Ce plugin est gratuit pour que chacun puisse en profiter simplement. Si vous souhaitez tout de même faire un don au développeur du plugin, merci de me faire un MP via le forum.
+Ce plugin est gratuit pour que chacun puisse en profiter simplement. Si vous souhaitez tout de même faire un don au développeur du plugin, merci de me faire un MP sur le forum.
 --
 
 .Le plugin ne voit pas ma carte 1-Wire de relai ?

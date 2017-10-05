@@ -172,9 +172,7 @@
     },
     "plugins\/wes\/plugin_info\/configuration.php": {
         "Temporisation minumum entre deux lectures en secondes": "Temporisation minumum entre deux lectures en secondes",
-        "Trop diminuer cette valeur peut rendre instable votre serveur": "Trop diminuer cette valeur peut rendre instable votre serveur",
-        "Faire un don au développeur": "Faire un don au développeur",
-        "Faire un don via Paypal au développeur": "Faire un don via Paypal au développeur"
+        "Trop diminuer cette valeur peut rendre instable votre serveur": "Trop diminuer cette valeur peut rendre instable votre serveur"
     },
     "plugins\/wes\/desktop\/php\/wes_analogique.php": {
         "Général": "Général",
