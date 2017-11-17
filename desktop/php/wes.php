@@ -172,7 +172,7 @@ $eqLogics = eqLogic::byTypeAndSearhConfiguration('wes', '"type":"carte"');
                 foreach ($eqLogics as $eqLogic) {
                     echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
                     echo "<center>";
-                    echo '<img src="plugins/wes/doc/images/wes_icon.png" height="105" width="95" />';
+                    echo '<img src="plugins/wes/plugin_info/wes_icon.png" height="105" width="95" />';
                     echo "</center>";
                     echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
                     echo '</div>';
@@ -189,7 +189,7 @@ $eqLogics = eqLogic::byTypeAndSearhConfiguration('wes', '"type":"carte"');
 				   <i class='fa fa-cogs eqLogicAction pull-right cursor expertModeVisible' data-action='configure'></i>
                 </legend>
                 <div class="form-group">
-                    <label class="col-lg-2 control-label">{{Nom de la Wes}}</label>
+                    <label class="col-lg-2 control-label">{{Nom d'equipement}}</label>
                     <div class="col-lg-3">
                         <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
                         <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de la Wes}}"/>
@@ -254,7 +254,19 @@ $eqLogics = eqLogic::byTypeAndSearhConfiguration('wes', '"type":"carte"');
                         <input type="password" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="password"/>
                     </div>
                 </div>
-            </fieldset> 
+				<div class="form-group teleinfo_only">
+					<label class="col-sm-3 control-label">{{Tarification :}}</label>
+					<div class="col-sm-5">
+						<select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="tarification">
+							<option value="">Sans</option>
+							<option value="BASE">Base</option>
+							<option value="HC">Heure creuse/Heure pleine</option>
+							<option value="BBRH">Tempo</option>
+							<option value="EJP">EJP</option>
+						</select>
+					</div>
+				</div>
+			</fieldset> 
         </form>
 
         <legend>{{Indicateurs}}</legend>

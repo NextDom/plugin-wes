@@ -171,6 +171,13 @@ function wes_update() {
 	if (config::byKey('api::wes::mode') == '') {
 		config::save('api::wes::mode', 'enable');
 	}
+	foreach (array("bouton", "relai", "compteur", "analogique", "teleinfo", "pince", "temperature") as $type)
+	{
+		if (file_exists (dirname(__FILE__) . '/../core/class/wes_'.$type.'.class.php'))
+			unlink(dirname(__FILE__) . '/../core/class/wes_'.$type.'.class.php');
+		if (file_exists (dirname(__FILE__) . '/../desktop/php/wes_'.$type.'.php'))
+			unlink(dirname(__FILE__) . '/../desktop/php/wes_'.$type.'.php');
+	}
 }
 
 function wes_remove() {

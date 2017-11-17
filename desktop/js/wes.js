@@ -128,6 +128,14 @@ function printEqLogic(_eqLogic) {
 	{
 		$('.carte_only').hide();
 	}
+	if ( _eqLogic.configuration.type == 'teleinfo' )
+	{
+		$('.teleinfo_only').show();
+	}
+	else
+	{
+		$('.teleinfo_only').hide();
+	}
 }
 
 $('body').delegate('.cmd .cmdAction[data-action=urlpush]', 'click', function (event) {
