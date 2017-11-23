@@ -133,6 +133,32 @@ $eqLogics = eqLogic::byTypeAndSearhConfiguration('wes', '"type":"carte"');
 									}
 								echo '</ul>';
 							echo '</li>';
+							echo '<li>';
+								echo '<i class="fa fa-check-circle-o cursor eqLogicAction" data-action="hide" data-eqLogic_id="vswitch_' . $eqLogic->getId() . '"></i>';
+								echo '<a class="cursor eqLogicAction" data-action="hide" style="display: inline;" data-eqLogic_id="vswitch_' . $eqLogic->getId() . '" data-eqLogic_type="wes">{{Virtuel switch}}</a>';
+								echo '<ul id="ul_eqLogic" class="nav nav-list bs-sidenav sub-nav-list" data-eqLogic_id="vswitch_' . $eqLogic->getId() . '" style="display: none;">';
+									$compteurId = 1;
+									$SubeqLogic = eqLogic::byLogicalId($eqLogic->getId()."_S".$compteurId, 'wes');
+									while ( is_object($SubeqLogic) ) {
+										echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $SubeqLogic->getId() . '" data-eqLogic_type="wes"><a>' . $SubeqLogic->getName() . '</a></li>';
+										$compteurId ++;
+										$SubeqLogic = eqLogic::byLogicalId($eqLogic->getId()."_S".$compteurId, 'wes');
+									}
+								echo '</ul>';
+							echo '</li>';
+							echo '<li>';
+								echo '<i class="fa fa-signal cursor eqLogicAction" data-action="hide" data-eqLogic_id="variable_' . $eqLogic->getId() . '"></i>';
+								echo '<a class="cursor eqLogicAction" data-action="hide" style="display: inline;" data-eqLogic_id="variable_' . $eqLogic->getId() . '" data-eqLogic_type="wes">{{Variable}}</a>';
+								echo '<ul id="ul_eqLogic" class="nav nav-list bs-sidenav sub-nav-list" data-eqLogic_id="variable_' . $eqLogic->getId() . '" style="display: none;">';
+									$compteurId = 1;
+									$SubeqLogic = eqLogic::byLogicalId($eqLogic->getId()."_V".$compteurId, 'wes');
+									while ( is_object($SubeqLogic) ) {
+										echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $SubeqLogic->getId() . '" data-eqLogic_type="wes"><a>' . $SubeqLogic->getName() . '</a></li>';
+										$compteurId ++;
+										$SubeqLogic = eqLogic::byLogicalId($eqLogic->getId()."_V".$compteurId, 'wes');
+									}
+								echo '</ul>';
+							echo '</li>';
 						echo '</ul>'."\n";
 					echo '</li>'."\n";
                 }

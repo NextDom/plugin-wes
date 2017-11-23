@@ -70,9 +70,9 @@ function wes_update() {
 		if ( $eqLogic->getConfiguration('type', '') == '' )
 		{
 			$eqLogic->setConfiguration('type', 'carte');
-			$eqLogic->save();
 			$FlagBasculeClass = true;
 		}
+		$eqLogic->save();
 		foreach (cmd::byEqLogicId($eqLogic->getId()) as $cmd) {
 			if ( $cmd->getEqType() != 'wes')
 			{

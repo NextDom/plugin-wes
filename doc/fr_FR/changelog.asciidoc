@@ -4,6 +4,8 @@ Liste des évolutions majeures de la version courante :
 
 - Regroupement des équipements dans une seule classe.
 - Auto decouverte du mode (mono ou tri phasé).
+- Ajout des vswitch
+- Ajout des variables
 
 Anciennes évolutions :
 
