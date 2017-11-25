@@ -1535,21 +1535,7 @@ class wesCmd extends cmd
 							$brut = $EqLogic->getCmd(null, 'brut');
 							$calcul = preg_replace("/#brut#/", "#".$brut->getId()."#", $calcul);
 						}
-						$calcul = scenarioExpression::setTags($calcul);
-						$test = new evaluate();
-						$result = $test->Evaluer($calcul);
-						if (is_numeric($result)) {
-							$result = number_format($result, 2);
-						} else {
-							$result = str_replace('"', '', $result);
-						}
-						if ($this->getSubType() == 'numeric') {
-							if (strpos($result, '.') !== false) {
-								$result = str_replace(',', '', $result);
-							} else {
-								$result = str_replace(',', '.', $result);
-							}
-						}
+						$result = jeedom::evaluateExpression($calcul);
 						return $result;
 					} catch (Exception $e) {
 						$EqLogic = $this->getEqLogic();
