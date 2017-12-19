@@ -1,14 +1,14 @@
 {
     "plugins\/wes\/plugin_info\/info.xml": {
         "Plugin pour gerer les cartes WES": "Plugin pour gerer les cartes WES",
-        "Nécessite firmware 0.50 minimum": "Nécessite firmware 0.50 minimum"
+        "Nécessite firmware 0.50 minimum": "Erfordert mindestens die Firmware 0,50"
     },
     "plugins\/wes\/core\/class\/wes.class.php": {
         "Tâche cron introuvable": "Tâche cron introuvable",
         "Le wes ne repond pas.": "Le wes ne repond pas."
     },
     "plugins\/wes\/desktop\/php\/wes_temperature.php": {
-        "Général": "Général",
+        "Général": "Allgemein",
         "Nom de l'entrée temperature": "Nom de l'entrée temperature",
         "Objet parent": "Objet parent",
         "Aucun": "Aucun",
