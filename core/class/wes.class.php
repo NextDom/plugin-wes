@@ -1336,7 +1336,16 @@ class wes extends eqLogic {
 			log::add('wes','debug','pull end '.$this->getName());
 		}
 	}
-    /*     * **********************Getteur Setteur*************************** */
+
+	public function getImage()
+	{
+		if (file_exists(dirname(__FILE__) . '/../../plugin_info/' . $this->getConfiguration('type', '') . '_icon.png')) {
+			return 'plugins/' . $this->getEqType_name() . '/plugin_info/' . $this->getConfiguration('type', '') . '_icon.png';
+		}
+		return parent::getImage();
+	}
+
+	/*     * **********************Getteur Setteur*************************** */
 }
 
 class wesCmd extends cmd 
