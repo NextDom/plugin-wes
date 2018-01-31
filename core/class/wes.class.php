@@ -1641,5 +1641,9 @@ class wesCmd extends cmd
 			return false;
 		}
     }
+
+	public function dontRemoveCmd() {
+		return true;
+	}
 }
 ?>
