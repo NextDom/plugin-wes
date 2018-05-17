@@ -17,13 +17,10 @@
  */
 
 /* * ***************************Includes********************************* */
-require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
+require_once __DIR__ . '/../../../../core/php/core.inc.php';
 
 class wes extends eqLogic
 {
-    /*     * *************************Attributs****************************** */
-
-    /*     * ***********************Methode static*************************** */
 
     public static function daemon()
     {
@@ -57,7 +54,7 @@ class wes extends eqLogic
         self::deamon_stop();
         $deamon_info = self::deamon_info();
         if ($deamon_info['launchable'] != 'ok') {
-            throw new Exception(__('Veuillez vérifier la configuration', __FILE__));
+            throw new \Exception(__('Veuillez vérifier la configuration', __FILE__));
         }
         $cron = cron::byClassAndFunction('wes', 'daemon');
         if (!is_object($cron)) {
@@ -1316,26 +1313,15 @@ class wes extends eqLogic
 
     public function getImage()
     {
-        if (file_exists(dirname(__FILE__) . '/../../plugin_info/' . $this->getConfiguration('type', '') . '_icon.png')) {
+        if (file_exists(__DIR__ . '/../../plugin_info/' . $this->getConfiguration('type', '') . '_icon.png')) {
             return 'plugins/' . $this->getEqType_name() . '/plugin_info/' . $this->getConfiguration('type', '') . '_icon.png';
         }
         return parent::getImage();
     }
-
-    /*     * **********************Getteur Setteur*************************** */
 }
 
 class wesCmd extends cmd
 {
-    /*     * *************************Attributs****************************** */
-
-
-    /*     * ***********************Methode static*************************** */
-
-
-    /*     * *********************Methode d'instance************************* */
-
-    /*     * **********************Getteur Setteur*************************** */
 
     public function getUrlPush()
     {
