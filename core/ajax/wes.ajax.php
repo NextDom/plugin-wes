@@ -21,13 +21,13 @@ try {
     include_file('core', 'authentification', 'php');
 	include_file('core', 'wes', 'class', 'wes');
     if (!isConnect('admin')) {
-        throw new Exception(__('401 - Accès non autorisé', __FILE__));
+        throw new \Exception(__('401 - Accès non autorisé', __FILE__));
     }
 
     if (init('action') == 'configPush') {
         $eqLogic = wes::byId(init('id'));
         if (!is_object($eqLogic)) {
-            throw new Exception(__('wes eqLogic non trouvé : ', __FILE__) . init('id'));
+            throw new \Exception(__('wes eqLogic non trouvé : ', __FILE__) . init('id'));
         }
 		$eqLogic->configPush();
         ajax::success(__('Url de push sur wes configuré', __FILE__));
@@ -41,4 +41,4 @@ try {
 } catch (Exception $e) {
     ajax::error(displayException($e), $e->getCode());
 }
-?>
+ 
