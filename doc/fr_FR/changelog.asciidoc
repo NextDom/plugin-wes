@@ -2,8 +2,9 @@ WARNING: Detail complet des mises à jour sur https://github.com/guenneguezt/plu
 
 Liste des évolutions majeures de la version courante :
 
-- Modification pour compatibilité Jeedom V3
-- Plus de suivi de version
+- Modification pour compatibilité Jeedom V4
+- Ajout information tension 
+- Ajout information nombre impulsion du jour pour les compteurs
 
 Anciennes évolutions :
 

@@ -36,6 +36,17 @@ class wes_compteur extends eqLogic {
 			$nbimpulsion->setEventOnly(1);
 			$nbimpulsion->save();
 		}
+		$nbimpulsionjour = $this->getCmd(null, 'nbimpulsionjour');
+		if ( ! is_object($nbimpulsionjour) ) {
+            $nbimpulsion = new wes_compteurCmd();
+			$nbimpulsion->setName('Nombre d impulsion pour la journée');
+			$nbimpulsion->setEqLogic_id($this->getId());
+			$nbimpulsion->setType('info');
+			$nbimpulsion->setSubType('numeric');
+			$nbimpulsion->setLogicalId('nbimpulsionjour');
+			$nbimpulsion->setEventOnly(1);
+			$nbimpulsion->save();
+		}
         $nbimpulsionminute = $this->getCmd(null, 'nbimpulsionminute');
         if ( ! is_object($nbimpulsionminute) ) {
             $nbimpulsionminute = new wes_compteurCmd();
@@ -61,6 +72,17 @@ class wes_compteur extends eqLogic {
 			$nbimpulsion->setType('info');
 			$nbimpulsion->setSubType('numeric');
 			$nbimpulsion->setLogicalId('nbimpulsion');
+			$nbimpulsion->setEventOnly(1);
+			$nbimpulsion->save();
+		}
+		$nbimpulsionjour = $this->getCmd(null, 'nbimpulsionjour');
+		if ( ! is_object($nbimpulsionjour) ) {
+            $nbimpulsion = new wes_compteurCmd();
+			$nbimpulsion->setName('Nombre d impulsion pour la journée');
+			$nbimpulsion->setEqLogic_id($this->getId());
+			$nbimpulsion->setType('info');
+			$nbimpulsion->setSubType('numeric');
+			$nbimpulsion->setLogicalId('nbimpulsionjour');
 			$nbimpulsion->setEventOnly(1);
 			$nbimpulsion->save();
 		}

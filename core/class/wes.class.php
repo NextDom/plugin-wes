@@ -118,7 +118,7 @@ class wes extends eqLogic {
 	{
 		if ( $this->getIsEnable() )
 		{
-			log::add('wes','debug','get data.cgx');
+			log::add('wes','debug','preUpdate get data.cgx');
 			$this->xmlstatus = simplexml_load_string($this->getUrl('data.cgx'));
 			if ( $this->xmlstatus === false )
 				throw new Exception(__('Le wes ne repond pas.',__FILE__));
@@ -134,12 +134,26 @@ class wes extends eqLogic {
 	{
 		$cmd = $this->getCmd(null, 'status');
 		if ( ! is_object($cmd) ) {
+			log::add('wes','debug','postInsert Creation status ');
 			$cmd = new wesCmd();
 			$cmd->setName('Etat');
 			$cmd->setEqLogic_id($this->getId());
 			$cmd->setType('info');
 			$cmd->setSubType('binary');
 			$cmd->setLogicalId('status');
+			$cmd->setIsVisible(1);
+			$cmd->setEventOnly(1);
+			$cmd->save();
+		}
+		$cmd = $this->getCmd(null, 'tension');
+		if ( ! is_object($cmd) ) {
+			log::add('wes','debug','postInsert Creation tension ');
+			$cmd = new wesCmd();
+			$cmd->setName('Tension');
+			$cmd->setEqLogic_id($this->getId());
+			$cmd->setType('info');
+			$cmd->setSubType('numeric');
+			$cmd->setLogicalId('tension');
 			$cmd->setIsVisible(1);
 			$cmd->setEventOnly(1);
 			$cmd->save();
@@ -162,13 +176,13 @@ class wes extends eqLogic {
 			$compteurId ++;
 			$status = $this->xmlstatus->xpath('//temp/SONDE'.$compteurId);
 		}
-		$this->xmlstatus = simplexml_load_string($this->getUrl('data.cgx'));
+//		$this->xmlstatus = simplexml_load_string($this->getUrl('data.cgx'));
 		for ($compteurId = 1; $compteurId <= 9; $compteurId++) {
 			$status = $this->xmlstatus->xpath('//relais1W/RELAIS'.$compteurId."01");
 			if ( count($status) != 0 ) {
 				for ($souscompteurId = 1; $souscompteurId <= 8; $souscompteurId++) {
 					if ( ! is_object(self::byLogicalId($this->getId()."_R".$compteurId.sprintf("%02d", $souscompteurId), 'wes_relai')) ) {
-						log::add('wes','debug','Creation relai : '.$this->getId().'_R'.$compteurId.sprintf("%02d", $souscompteurId));
+						log::add('wes','debug','Creation relais 1W : '.$this->getId().'_R'.$compteurId.sprintf("%02d", $souscompteurId));
 						$eqLogic = new wes_relai();
 						$eqLogic->setLogicalId($this->getId().'_R'.$compteurId.sprintf("%02d", $souscompteurId));
 						$eqLogic->setName('Relai ' . $compteurId.sprintf("%02d", $souscompteurId));
@@ -180,7 +194,7 @@ class wes extends eqLogic {
 				for ($souscompteurId = 1; $souscompteurId <= 8; $souscompteurId++) {
 					$eqLogic = self::byLogicalId($this->getId()."_R".$compteurId.sprintf("%02d", $souscompteurId), 'wes_relai');
 					if ( is_object($eqLogic) ) {
-						log::add('wes','debug','Suppression relai : '.$this->getId().'_R'.$compteurId.sprintf("%02d", $souscompteurId));
+						log::add('wes','debug','Suppression relais 1W : '.$this->getId().'_R'.$compteurId.sprintf("%02d", $souscompteurId));
 						$eqLogic->remove();
 					}
 				}
@@ -189,7 +203,7 @@ class wes extends eqLogic {
 
 		for ($compteurId = 1; $compteurId <= 2; $compteurId++) {
 			if ( ! is_object(self::byLogicalId($this->getId()."_R".$compteurId, 'wes_relai')) ) {
-				log::add('wes','debug','Creation relai : '.$this->getId().'_R'.$compteurId);
+				log::add('wes','debug','Creation relais : '.$this->getId().'_R'.$compteurId);
 				$eqLogic = new wes_relai();
 				$eqLogic->setLogicalId($this->getId().'_R'.$compteurId);
 				$eqLogic->setName('Relai ' . $compteurId);
@@ -219,7 +233,7 @@ class wes extends eqLogic {
 			$status = $this->xmlstatus->xpath('//impulsion/INDEX'.$compteurId);
 		}
 
-		for ($compteurId = 1; $compteurId <= 2; $compteurId++) {
+		for ($compteurId = 1; $compteurId <= 3; $compteurId++) {
 			if ( ! is_object(self::byLogicalId($this->getId()."_T".$compteurId, 'wes_teleinfo')) ) {
 				log::add('wes','debug','Creation teleinfo : '.$this->getId().'_T'.$compteurId);
 				$eqLogic = new wes_teleinfo();
@@ -245,20 +259,40 @@ class wes extends eqLogic {
 
 		$compteurId = 1;
 		$status = $this->xmlstatus->xpath('//analogique/AD'.$compteurId);
+		log::add('wes','debug','recherche Analogique : _N'.$compteurId);
 		while ( count($status) != 0 ) {
 			if ( ! is_object(self::byLogicalId($this->getId()."_N".$compteurId, 'wes_analogique')) ) {
 				log::add('wes','debug','Creation Analogique : '.$this->getId().'_N'.$compteurId);
 				$eqLogic = new wes_analogique();
 				$eqLogic->setLogicalId($this->getId().'_N'.$compteurId);
 				$eqLogic->setName('Analogique ' . $compteurId);
+				log::add('wes','debug','Creation Analogique avant save : '.$this->getId().'_N'.$compteurId);
 				$eqLogic->save();
+				log::add('wes','debug','Creation Analogique après save: '.$this->getId().'_N'.$compteurId);
 			}
 			$compteurId ++;
+			log::add('wes','debug','recherche Analogique suivant : _N'.$compteurId);
 			$status = $this->xmlstatus->xpath('//analogique/AD'.$compteurId);
 		}
 
+		$cmd = $this->getCmd(null, 'tension');
+		log::add('wes','debug','recherche tension');
+		if ( ! is_object($cmd) ) {
+			log::add('wes','debug','Creation tension ');
+			$cmd = new wesCmd();
+			$cmd->setName('Tension');
+			$cmd->setEqLogic_id($this->getId());
+			$cmd->setType('info');
+			$cmd->setSubType('numeric');
+			$cmd->setLogicalId('tension');
+			$cmd->setIsVisible(1);
+			$cmd->setEventOnly(1);
+			$cmd->save();
+		}
+		
 		$cmd = $this->getCmd(null, 'status');
 		if ( ! is_object($cmd) ) {
+			log::add('wes','debug','Creation tension ');
 			$cmd = new wesCmd();
 			$cmd->setName('Etat');
 			$cmd->setEqLogic_id($this->getId());
@@ -269,19 +303,19 @@ class wes extends eqLogic {
 			$cmd->setEventOnly(1);
 			$cmd->save();
 		}
-/*        $reboot = $this->getCmd(null, 'reboot');
-        if ( ! is_object($reboot) ) {
-            $reboot = new wesCmd();
-			$reboot->setName('Reboot');
-			$reboot->setEqLogic_id($this->getId());
-			$reboot->setType('action');
-			$reboot->setSubType('other');
-			$reboot->setLogicalId('reboot');
-			$reboot->setIsVisible(0);
-			$reboot->setEventOnly(1);
-			$reboot->save();
-		}
-*/	}
+//        $reboot = $this->getCmd(null, 'reboot');
+//        if ( ! is_object($reboot) ) {
+//            $reboot = new wesCmd();
+//			$reboot->setName('Reboot');
+//			$reboot->setEqLogic_id($this->getId());
+//			$reboot->setType('action');
+//			$reboot->setSubType('other');
+//			$reboot->setLogicalId('reboot');
+//			$reboot->setIsVisible(0);
+//			$reboot->setEventOnly(1);
+//			$reboot->save();
+//		}
+	}
 
 	public function preRemove()
 	{
@@ -398,6 +432,7 @@ class wes extends eqLogic {
 						
 						if ( count($status) != 0 )
 						{
+							settype($status[0], "string");
 							$eqLogic_cmd = $eqLogicRelai->getCmd(null, 'state');
 							if ($eqLogic_cmd->execCmd() != $eqLogic_cmd->formatValue($status[0])) {
 								log::add('wes','debug',"Change state off ".$eqLogicRelai->getName());
@@ -411,6 +446,7 @@ class wes extends eqLogic {
 						
 						if ( count($status) != 0 )
 						{
+							settype($status[0], "string");
 							$eqLogic_cmd = $eqLogicRelai->getCmd(null, 'state');
 							if ($eqLogic_cmd->execCmd() != $eqLogic_cmd->formatValue($status[0])) {
 								log::add('wes','debug',"Change state off ".$eqLogicRelai->getName());
@@ -429,6 +465,7 @@ class wes extends eqLogic {
 					
 					if ( count($status) != 0 )
 					{
+						settype($status[0], "string");
 						$eqLogic_cmd = $eqLogicBouton->getCmd(null, 'state');
 						if ($eqLogic_cmd->execCmd() != $eqLogic_cmd->formatValue($status[0])) {
 							log::add('wes','debug',"Change state off ".$eqLogicBouton->getName());
@@ -446,6 +483,7 @@ class wes extends eqLogic {
 					
 					if ( count($status) != 0 )
 					{
+						settype($status[0], "string");
 						$eqLogic_cmd = $eqLogictemperature->getCmd(null, 'reel');
 						if ($eqLogic_cmd->execCmd() != $eqLogic_cmd->formatValue($status[0])) {
 							log::add('wes','debug',"Change reel ".$eqLogictemperature->getName());
@@ -463,12 +501,15 @@ class wes extends eqLogic {
 					
 					if ( count($status) != 0 )
 					{
+						settype($status[0], "string");
 						$nbimpulsion_cmd = $eqLogicCompteur->getCmd(null, 'nbimpulsion');
 						$nbimpulsion = $nbimpulsion_cmd->execCmd();
 						$nbimpulsionminute_cmd = $eqLogicCompteur->getCmd(null, 'nbimpulsionminute');
 						if ( $nbimpulsion != $status[0] ) {
 							log::add('wes','debug',"Change nbimpulsion off ".$eqLogicCompteur->getName());
 							$lastCollectDate = $nbimpulsion_cmd->getCollectDate();
+							$nbimpulsion_cmd->setCollectDate('');
+							$nbimpulsion_cmd->event($status[0]);
 							if ( $lastCollectDate == '' ) {
 								log::add('wes','debug',"Change nbimpulsionminute 0");
 								$nbimpulsionminute = 0;
@@ -487,17 +528,33 @@ class wes extends eqLogic {
 								}
 							}
 							log::add('wes','debug',"Change nbimpulsionminute ".$nbimpulsionminute);
-							$nbimpulsionminute_cmd->setCollectDate(date('Y-m-d H:i:s'));
+							$nbimpulsionminute_cmd->setCollectDate('');
 							$nbimpulsionminute_cmd->event($nbimpulsionminute);
 						} else {
-							$nbimpulsionminute_cmd->setCollectDate(date('Y-m-d H:i:s'));
-							$nbimpulsionminute_cmd->event(0);
+							if ($nbimpulsionminute_cmd->execCmd() != 0) 
+							{ 
+								log::add('wes','debug',"Change nbimpulsionminute à 0");
+								$nbimpulsionminute_cmd->setCollectDate('');
+								$nbimpulsionminute_cmd->event(0);
+							}
 						}
-						$nbimpulsion_cmd->setCollectDate(date('Y-m-d H:i:s'));
-						$nbimpulsion_cmd->event($status[0]);
+					}
+					$xpathModele = '//impulsion/PULSE'.$wesid;
+					$status = $this->xmlstatus->xpath($xpathModele);
+                  	if ( count($status) != 0 )
+					{
+						settype($status[0], "string");
+						$eqLogic_cmd = $eqLogicCompteur->getCmd(null, 'nbimpulsionjour');
+						if ($eqLogic_cmd->execCmd() != $eqLogic_cmd->formatValue($status[0])) {
+							log::add('wes','debug',"Change nbimpulsionjour ".$eqLogicCompteur->getName());
+							$eqLogic_cmd->setCollectDate('');
+							$eqLogic_cmd->event($status[0]);
+						}
 					}
 				}
 			}
+
+
 			foreach (self::byType('wes_pince') as $eqLogicPince) {
 				if ( $eqLogicPince->getIsEnable() && substr($eqLogicPince->getLogicalId(), 0, strpos($eqLogicPince->getLogicalId(),"_")) == $this->getId() ) {
 					$wesid = substr($eqLogicPince->getLogicalId(), strpos($eqLogicPince->getLogicalId(),"_")+2);
@@ -506,24 +563,27 @@ class wes extends eqLogic {
 					
 					if ( count($status) != 0 )
 					{
+						settype($status[0], "string");
+//						log::add('wes','debug',"Trouvé intensite ".$eqLogicPince->getName()."  ==> ".$status[0]);
 						$eqLogic_cmd = $eqLogicPince->getCmd(null, 'intensite');
 						if ($eqLogic_cmd->execCmd() != $eqLogic_cmd->formatValue($status[0])) {
 							log::add('wes','debug',"Change intensite ".$eqLogicPince->getName());
+							$eqLogic_cmd->setCollectDate('');
+							$eqLogic_cmd->event($status[0]);
 						}
-						$eqLogic_cmd->setCollectDate('');
-						$eqLogic_cmd->event($status[0]);
 					}
 					$xpathModele = '//pince/INDEX'.$wesid;
 					$status = $this->xmlstatus->xpath($xpathModele);
 					
 					if ( count($status) != 0 )
 					{
+						settype($status[0], "string");
 						$eqLogic_cmd = $eqLogicPince->getCmd(null, 'puissance');
 						if ($eqLogic_cmd->execCmd() != $eqLogic_cmd->formatValue($status[0])) {
 							log::add('wes','debug',"Change puissance ".$eqLogicPince->getName());
+							$eqLogic_cmd->setCollectDate('');
+							$eqLogic_cmd->event($status[0]);
 						}
-						$eqLogic_cmd->setCollectDate('');
-						$eqLogic_cmd->event($status[0]);
 					}
 				}
 			}
@@ -536,7 +596,8 @@ class wes extends eqLogic {
 					if ( count($status) != 0 )
 					{
 						foreach($status[0] as $item => $data) {
-						log::add('wes','debug',"Trouve ".$item." => ".$data);
+							settype($data, "string");
+//							log::add('wes','debug',"Trouve ".$item." => ".$data);
 							$eqLogic_cmd = $eqLogicTeleinfo->getCmd(null, $item);
 							if ( is_object($eqLogic_cmd) ) {
 								$eqLogic_cmd_evol = $eqLogicTeleinfo->getCmd(null, $item."_evolution");
@@ -578,6 +639,7 @@ class wes extends eqLogic {
 					
 					if ( count($status) != 0 )
 					{
+						settype($status[0], "string");
 						$eqLogic_cmd = $eqLogicCompteur->getCmd(null, 'brut');
 						if ($eqLogic_cmd->execCmd() != $eqLogic_cmd->formatValue($status[0])) {
 							log::add('wes','debug',"Change brut ".$eqLogicCompteur->getName());
@@ -585,6 +647,23 @@ class wes extends eqLogic {
 						$eqLogic_cmd->setCollectDate('');
 						$eqLogic_cmd->event($status[0]);
 					}
+				}
+			}
+			$xpathModele = '//pince/V';
+//			log::add('wes','debug',"Tension recherche");			
+			$status = $this->xmlstatus->xpath($xpathModele);
+			if ( count($status) != 0 )
+			{
+//				log::add('wes','debug',"Tension recherche OK:".$status[0]);
+				$eqLogic_cmd = $this->getCmd(null,'tension');
+//				$valeur = intval($status[0]);
+				settype($status[0], "string");
+//				log::add('wes','debug',"Tension       numerique:".gettype($status[0]).":".$eqLogic_cmd->formatValue($status[0])."-int-".$status[0].':');
+//				log::add('wes','debug',"Tension       valeur   :".gettype($status[0].'').":".$eqLogic_cmd->formatValue($status[0].'').':');
+				if ($eqLogic_cmd->execCmd() != $eqLogic_cmd->formatValue($status[0])) {
+					log::add('wes','debug',"Change tension ");
+					$eqLogic_cmd->setCollectDate('');
+					$eqLogic_cmd->event($status[0]);
 				}
 			}
 			log::add('wes','debug','pull end '.$this->getName());

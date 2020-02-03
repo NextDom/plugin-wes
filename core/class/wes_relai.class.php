@@ -155,13 +155,13 @@ class wes_relaiCmd extends cmd
 		$weseqLogic = eqLogic::byId(substr ($eqLogic->getLogicalId(), 0, strpos($eqLogic->getLogicalId(),"_")));
 		$wesid = substr($eqLogic->getLogicalId(), strpos($eqLogic->getLogicalId(),"_")+2);
 		if ( $this->getLogicalId() == 'btn_on' )
-			$file .= 'RL.cgi?rl'.($wesid).'=ON';
+			$file = 'RL.cgi?rl'.($wesid).'=ON';
 		else if ( $this->getLogicalId() == 'btn_off' )
-			$file .= 'RL.cgi?rl'.($wesid).'=OFF';
+			$file = 'RL.cgi?rl'.($wesid).'=OFF';
 /*		else if ( $this->getLogicalId() == 'impulsion' )
 			$file .= 'preset.htm?RLY'.($wesid+1).'=1';*/
 		else if ( $this->getLogicalId() == 'commute' )
-			$file .= 'RL.cgi?frl='.$wesid;
+			$file = 'RL.cgi?frl='.$wesid;
 		else
 			return false;
 		$weseqLogic->getUrl($file);

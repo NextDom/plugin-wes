@@ -25,58 +25,63 @@ class wes_analogique extends eqLogic {
     /*     * ***********************Methode static*************************** */
 	public function postUpdate()
 	{
-        $brut = $this->getCmd(null, 'voltage');
-        if ( is_object($brut) ) {
-			$brut->setLogicalId('brut');
-			$brut->save();
-		} else {
-			$brut = $this->getCmd(null, 'brut');
-		}
-        $reel = $this->getCmd(null, 'reel');
-        if ( ! is_object($reel) ) {
-            $reel = new wes_analogiqueCmd();
-			$reel->setName('Réel');
-			$reel->setEqLogic_id($this->getId());
-			$reel->setType('info');
-			$reel->setSubType('numeric');
-			$reel->setLogicalId('reel');
-			$reel->setEventOnly(1);
-			$reel->setConfiguration('calcul', '#' . $brut->getId() . '#');
-			$reel->save();
-		}
+      $brut = $this->getCmd(null, 'brut');
+      if ( ! is_object($brut) ) {
+        $brut = new wes_analogiqueCmd();
+				$brut->setName('Brut');
+				$brut->setEqLogic_id($this->getId());
+				$brut->setType('info');
+				$brut->setSubType('numeric');
+				$brut->setLogicalId('brut');
+				$brut->setIsVisible(0);
+				$brut->setEventOnly(1);
+				$brut->save();
+			}
+      $reel = $this->getCmd(null, 'reel');
+      if ( ! is_object($reel) ) {
+        $reel = new wes_analogiqueCmd();
+				$reel->setName('Réel');
+				$reel->setEqLogic_id($this->getId());
+				$reel->setType('info');
+				$reel->setSubType('numeric');
+				$reel->setLogicalId('reel');
+				$reel->setEventOnly(1);
+				$reel->setConfiguration('calcul', '#' . $brut->getId() . '#');
+				$reel->save();
+			}
 	}
 
 	public function postInsert()
 	{
-        $brut = $this->getCmd(null, 'brut');
-        if ( ! is_object($brut) ) {
-            $brut = new wes_analogiqueCmd();
-			$brut->setName('Brut');
-			$brut->setEqLogic_id($this->getId());
-			$brut->setType('info');
-			$brut->setSubType('numeric');
-			$brut->setLogicalId('brut');
-			$brut->setIsVisible(false);
-			$brut->setEventOnly(1);
-			$brut->save();
-		}
-        $reel = $this->getCmd(null, 'reel');
-        if ( ! is_object($reel) ) {
-            $reel = new wes_analogiqueCmd();
-			$reel->setName('Réel');
-			$reel->setEqLogic_id($this->getId());
-			$reel->setType('info');
-			$reel->setSubType('numeric');
-			$reel->setLogicalId('reel');
-			$reel->setEventOnly(1);
-			$reel->setConfiguration('calcul', '#' . $brut->getId() . '#');
-			$reel->save();
-		}
+      $brut = $this->getCmd(null, 'brut');
+      if ( ! is_object($brut) ) {
+        $brut = new wes_analogiqueCmd();
+				$brut->setName('Brut');
+				$brut->setEqLogic_id($this->getId());
+				$brut->setType('info');
+				$brut->setSubType('numeric');
+				$brut->setLogicalId('brut');
+				$brut->setIsVisible(0);
+				$brut->setEventOnly(1);
+				$brut->save();
+			}
+      $reel = $this->getCmd(null, 'reel');
+      if ( ! is_object($reel) ) {
+        $reel = new wes_analogiqueCmd();
+				$reel->setName('Réel');
+				$reel->setEqLogic_id($this->getId());
+				$reel->setType('info');
+				$reel->setSubType('numeric');
+				$reel->setLogicalId('reel');
+				$reel->setEventOnly(1);
+				$reel->setConfiguration('calcul', '#' . $brut->getId() . '#');
+				$reel->save();
+			}
 	}
 
 	public function preInsert()
 	{
-		$gceid = substr($this->getLogicalId(), strpos($this->getLogicalId(),"_")+2);
+//		$gceid = substr($this->getLogicalId(), strpos($this->getLogicalId(),"_")+2);
 		$this->setEqType_name('wes_analogique');
 		$this->setIsEnable(0);
 		$this->setIsVisible(0);
