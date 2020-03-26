@@ -609,7 +609,7 @@ class wesCmd extends cmd
         if (!is_object($eqLogic) || $eqLogic->getIsEnable() != 1) {
             throw new Exception(__('Equipement desactivé impossible d\éxecuter la commande : ' . $this->getHumanName(), __FILE__));
         }
-			
+		$url = '';
 		if ( $this->getLogicalId() == 'all_on' )
 		{
 			$url .= 'preset.htm';

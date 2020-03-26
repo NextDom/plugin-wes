@@ -212,16 +212,16 @@ class wes_relaiCmd extends cmd
 			$type = 'DevSwitch'; // Le type Imperihome qui correspond le mieux à la commande
 		}
 		else {
-			return $info_device;
+			return "";
 		}
 		$eqLogic = $this->getEqLogic(); // Récupération de l'équipement de la commande
-		$object = $eqLogic->getObject(); // Récupération de l'objet de l'équipement
+        $jeeObject = $eqLogic->getObject(); // Récupération de l'objet de l'équipement
 
 		// Construction de la structure de base
 		$info_device = array(
 		'id' => $this->getId(), // ID de la commande, ne pas mettre autre chose!
 		'name' => $eqLogic->getName()." - ".$this->getName(), // Nom de l'équipement que sera affiché par Imperihome: mettre quelque chose de parlant...
-		'room' => (is_object($object)) ? $object->getId() : 99999, // Numéro de la pièce: ne pas mettre autre chose que ce code
+		'room' => (is_object($jeeObject)) ? $jeeObject->getId() : 99999, // Numéro de la pièce: ne pas mettre autre chose que ce code
 		'type' => $type, // Type de l'équipement à retourner (cf ci-dessus)
 		'params' => array(), // Le tableau des paramètres liés à ce type (qui sera complété aprés.
 		);
